@@ -7,22 +7,27 @@
 </head>
 <body>
   <script id="board-list-template" type="x-tmpl-mustache" class="template">
-    <table id="board-list">
-      <thead>
-        <tr>
-          <th>available boards:</th>
-        </tr>                
-      </thead>
-      <tbody>
-        {{#boards}}
+    <div id="board-list">    
+      <table>
+        <thead>
           <tr>
-            <td>
-              <a href="?/{{abbr}}/">{{name}}</a>
-            </td>
-          </tr>
-        {{/boards}}
-      </tbody>
-    </table>
+            <th>available boards:</th>
+          </tr>                
+        </thead>
+        <tbody>
+          {{#boards}}
+            <tr>
+              <td>
+                <a href="?/{{abbr}}/">{{name}}</a>
+              </td>
+            </tr>
+          {{/boards}}
+        </tbody>
+      </table>
+      <span>
+        last post: <em id="last-post">loading...</em>
+      </span>
+    </div>
   </script>
 
   <script id="empty-board-template" type="x-tmpl-mustache" class="template">

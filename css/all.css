@@ -155,7 +155,7 @@ body {
 }
 
 #header {
-  max-width: 800px;
+  max-width: 900px;
   // min-height: 10px;
   margin: 0 auto;
   color: #999;
@@ -209,7 +209,7 @@ hr {
 }
 
 #header, #container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -608,6 +608,14 @@ hr.white {
 
 #board-list {
   font-size: 13px;
+}
+
+#board-list span {
+  display: block;
+  margin-top: 15px;
+  margin-left: 8px;
+  color: #888;
+  font-size: 11px;
 }
 
 #board-list td {

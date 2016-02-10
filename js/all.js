@@ -287,6 +287,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
 
   BoardList = (function() {
     function BoardList() {
+      this.updateLastPost = bind(this.updateLastPost, this);
       this.renderMainPageBoardList = bind(this.renderMainPageBoardList, this);
       this.reloadBoardList = bind(this.reloadBoardList, this);
       this.get = bind(this.get, this);
@@ -332,8 +333,28 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
             container.outerHTML = Templates.render("board-list", {
               boards: _this.boards
             });
+            _this.updateLastPost();
             return fulfill();
           });
+        };
+      })(this));
+    };
+
+    BoardList.prototype.updateLastPost = function() {
+      var query;
+      if (Nullchan.currentPage() !== "main") {
+        return;
+      }
+      query = "SELECT message.* FROM message ORDER BY message.created_at DESC LIMIT 1";
+      return Nullchan.cmd('dbQuery', query, (function(_this) {
+        return function(data) {
+          var ref, text;
+          if ((ref = data[0]) != null ? ref.created_at : void 0) {
+            text = Time.since(data[0].created_at);
+          } else {
+            text = "N/A";
+          }
+          return document.getElementById("last-post").innerHTML = text;
         };
       })(this));
     };
@@ -613,7 +634,11 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
       this.replyForm.style.display = "table";
       this.replyForm.getElementsByClassName("text")[0].focus();
       this.replyForm.getElementsByClassName("parent")[0].value = hash;
-      return this.updateAuthForms();
+      return this.updateAuthForms().then((function(_this) {
+        return function() {
+          return _this.bindEvents(_this.replyForm);
+        };
+      })(this));
     };
 
     Forms.prototype.clearForm = function(form) {
@@ -627,6 +652,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
   window.Forms = new Forms();
 
 }).call(this);
+
 
 
 /* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/js/zengine/header.coffee ---- */
@@ -1098,6 +1124,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
     };
 
     Nullchan.prototype.onRequest = function(command, message) {
+      this.log("Got command " + command);
       if (command === "setSiteInfo") {
         return this.updateSiteInfo(message);
       }
@@ -1106,6 +1133,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
     Nullchan.prototype.updateSiteInfo = function(newInfo) {
       this.siteInfo = newInfo;
       this.updateHeader();
+      BoardList.updateLastPost();
       return Forms.updateAuthForms();
     };
 

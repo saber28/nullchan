@@ -156,6 +156,7 @@ class Forms
     new Promise (fulfill, reject) =>
       for auth in document.getElementsByClassName("auth-form")
         auth.innerHTML = Templates.render("auth-form", { user: Nullchan.shortUserName() })
+
       fulfill()
 
   callReplyForm: (event) =>
@@ -174,7 +175,7 @@ class Forms
     @replyForm.style.display = "table"
     @replyForm.getElementsByClassName("text")[0].focus()
     @replyForm.getElementsByClassName("parent")[0].value = hash
-    @updateAuthForms()
+    @updateAuthForms().then => @bindEvents(@replyForm)
 
   clearForm: (form) =>
     form.reset()

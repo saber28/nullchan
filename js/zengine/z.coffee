@@ -21,12 +21,14 @@ class Nullchan extends ZeroFrame
         @determineRoute()
 
   onRequest: (command, message) =>
+    @log("Got command #{command}")
     if command == "setSiteInfo"
       @updateSiteInfo(message)
 
   updateSiteInfo: (newInfo) =>
     @siteInfo = newInfo
     @updateHeader()
+    BoardList.updateLastPost()
     Forms.updateAuthForms()
 
   updateHeader: => 
