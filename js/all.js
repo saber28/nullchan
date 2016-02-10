@@ -296,10 +296,10 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
     BoardList.prototype.boards = [];
 
     BoardList.prototype.get = function(name) {
-      var board, i, len, ref;
+      var board, j, len, ref;
       ref = this.boards;
-      for (i = 0, len = ref.length; i < len; i++) {
-        board = ref[i];
+      for (j = 0, len = ref.length; j < len; j++) {
+        board = ref[j];
         if (board.abbr === name) {
           return board;
         }
@@ -313,12 +313,19 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
       }
       return new Promise((function(_this) {
         return function(fulfill, reject) {
-          if (forceReload === false && _this.boards.length > 0) {
-            return fulfill();
-          }
           return Nullchan.cmd("fileGet", "data/boards.json", function(data) {
             _this.boards = JSON.parse(data).boards;
-            return fulfill();
+            return SeenCount.getUnread().then(function(unreadCount) {
+              var board, i, j, len, ref;
+              ref = _this.boards;
+              for (i = j = 0, len = ref.length; j < len; i = ++j) {
+                board = ref[i];
+                if (unreadCount[board.abbr] > 0) {
+                  _this.boards[i].unread = unreadCount[board.abbr];
+                }
+              }
+              return fulfill();
+            });
           });
         };
       })(this));
@@ -364,6 +371,45 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
   })();
 
   window.BoardList = new BoardList;
+
+}).call(this);
+
+
+/* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/js/zengine/database.coffee ---- */
+
+
+(function() {
+  var Database,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  Database = (function() {
+    function Database() {
+      this.messageCountByBoard = bind(this.messageCountByBoard, this);
+    }
+
+    Database.prototype.messageCountByBoard = function() {
+      return new Promise((function(_this) {
+        return function(fulfill, reject) {
+          var query;
+          query = "SELECT message.board, COUNT(*) FROM message GROUP BY board";
+          return Nullchan.cmd("dbQuery", query, function(counts) {
+            var count, i, len, result;
+            result = {};
+            for (i = 0, len = counts.length; i < len; i++) {
+              count = counts[i];
+              result[count.board] = count["COUNT(*)"];
+            }
+            return fulfill(result);
+          });
+        };
+      })(this));
+    };
+
+    return Database;
+
+  })();
+
+  window.Database = new Database;
 
 }).call(this);
 
@@ -768,6 +814,115 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
 }).call(this);
 
 
+/* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/js/zengine/seen_count.coffee ---- */
+
+
+(function() {
+  var SeenCount,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  SeenCount = (function() {
+    function SeenCount() {
+      this.getUnread = bind(this.getUnread, this);
+      this.getLocalCounter = bind(this.getLocalCounter, this);
+      this.setLocalCounter = bind(this.setLocalCounter, this);
+      this.updateActualCounter = bind(this.updateActualCounter, this);
+      this.getActualCounter = bind(this.getActualCounter, this);
+    }
+
+    SeenCount.prototype.actualCounter = null;
+
+    SeenCount.prototype.getActualCounter = function() {
+      return new Promise((function(_this) {
+        return function(fulfill, reject) {
+          if (_this.actualCounter !== null) {
+            return fulfill(_this.actualCounter);
+          } else {
+            return updateActualCounter().then(function() {
+              return fulfill(_this.actualCounter);
+            });
+          }
+        };
+      })(this));
+    };
+
+    SeenCount.prototype.updateActualCounter = function() {
+      return new Promise((function(_this) {
+        return function(fulfill, reject) {
+          return Database.messageCountByBoard().then(function(counter) {
+            _this.actualCounter = counter;
+            return fulfill();
+          });
+        };
+      })(this));
+    };
+
+    SeenCount.prototype.setLocalCounter = function(boardAbbr) {
+      return this.getActualCounter().then((function(_this) {
+        return function(actualCounter) {
+          return _this.getLocalCounter().then(function(localCounter) {
+            var board, data, i, len, ref;
+            localCounter[boardAbbr] = actualCounter[boardAbbr];
+            data = {};
+            ref = BoardList.boards;
+            for (i = 0, len = ref.length; i < len; i++) {
+              board = ref[i];
+              data["msg_" + board.abbr] = localCounter[board.abbr] || 0;
+            }
+            return Nullchan.cmd("wrapperSetLocalStorage", data);
+          });
+        };
+      })(this));
+    };
+
+    SeenCount.prototype.getLocalCounter = function() {
+      return new Promise((function(_this) {
+        return function(fulfill, reject) {
+          return Nullchan.cmd("wrapperGetLocalStorage", [], function(response) {
+            var board, i, len, ref, result;
+            result = {};
+            if (response == null) {
+              response = {};
+            }
+            ref = BoardList.boards;
+            for (i = 0, len = ref.length; i < len; i++) {
+              board = ref[i];
+              result[board.abbr] = response["msg_" + board.abbr] || 0;
+            }
+            return fulfill(result);
+          });
+        };
+      })(this));
+    };
+
+    SeenCount.prototype.getUnread = function() {
+      return new Promise((function(_this) {
+        return function(fulfill, reject) {
+          return _this.getActualCounter().then(function(actualCounter) {
+            return _this.getLocalCounter().then(function(localCounter) {
+              var board, i, len, ref, result;
+              result = {};
+              ref = BoardList.boards;
+              for (i = 0, len = ref.length; i < len; i++) {
+                board = ref[i];
+                result[board.abbr] = actualCounter[board.abbr] - localCounter[board.abbr];
+              }
+              return fulfill(result);
+            });
+          });
+        };
+      })(this));
+    };
+
+    return SeenCount;
+
+  })();
+
+  window.SeenCount = new SeenCount;
+
+}).call(this);
+
+
 /* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/js/zengine/templates.coffee ---- */
 
 
@@ -908,6 +1063,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
               }
             }
             _this.bindEvents();
+            SeenCount.setLocalCounter(Nullchan.currentBoard.abbr);
             return fulfill();
           });
         };
@@ -1156,6 +1312,13 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
     Nullchan.prototype.updateSiteInfo = function(newInfo) {
       this.siteInfo = newInfo;
       this.updateHeader();
+      SeenCount.updateActualCounter().then((function(_this) {
+        return function() {
+          if (_this.currentPage() === "main") {
+            return BoardList.renderMainPageBoardList();
+          }
+        };
+      })(this));
       BoardList.updateLastPost();
       return Forms.updateAuthForms();
     };

@@ -53,6 +53,7 @@ class Threads
             if (cnt = @renderThread(thread, false))
               @container.appendChild(cnt)
         @bindEvents()
+        SeenCount.setLocalCounter(Nullchan.currentBoard.abbr)
         fulfill()
 
   renderThread: (data, full) =>

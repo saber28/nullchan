@@ -8,11 +8,13 @@ class BoardList
 
   reloadBoardList: (forceReload = false) =>
     new Promise (fulfill, reject) =>
-      if forceReload == false and @boards.length > 0
-        return fulfill()
       Nullchan.cmd "fileGet", "data/boards.json", (data) =>
         @boards = JSON.parse(data).boards
-        fulfill()
+        SeenCount.getUnread().then (unreadCount) => 
+          for board, i in @boards
+            if unreadCount[board.abbr] > 0
+              @boards[i].unread = unreadCount[board.abbr]
+          fulfill()
 
   renderMainPageBoardList: =>
     new Promise (fulfill, reject) =>

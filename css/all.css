@@ -617,6 +617,10 @@ h2 {
   margin: 7px 0px 7px 0px;
 }
 
+.monospace {
+  font-family: monospace !important;
+}
+
 hr.white {
   border-color: #eee;
 }
@@ -626,16 +630,23 @@ hr.white {
 }
 
 #board-list span {
-  display: block;
-  margin-top: 15px;
-  margin-left: 8px;
+  display: table;
   color: #888;
-  font-size: 11px;
+  font-size: 12px;
+  font-family: Trebuchet, "Trebuchet MS", sans-serif;
+}
+
+#board-list .unread {
+  text-align: right;
+  padding-right: 4px;
+  font-size: 11px !important;
+  min-width: 10px;
+  color: #cf6;
 }
 
 #board-list td {
   text-align: left;
-  padding: 0px 0px 5px 0px;
+  padding: 3px 0px 3px 0px;
 }
 
 #glagne a {
@@ -679,7 +690,7 @@ hr.white {
   font-size: 11px;
 }
 
-.inner blockquote span u {
+.inner blockquote span em {
   margin-bottom: 5px;
   margin-top: 5px;
   display: block;

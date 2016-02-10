@@ -29,6 +29,9 @@ class Nullchan extends ZeroFrame
   updateSiteInfo: (newInfo) =>
     @siteInfo = newInfo
     @updateHeader()
+    SeenCount.updateActualCounter().then =>
+      if @currentPage() == "main"
+        BoardList.renderMainPageBoardList()
     BoardList.updateLastPost()
     Forms.updateAuthForms()
 
