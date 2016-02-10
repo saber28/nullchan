@@ -13,9 +13,6 @@ class Header
       noLink:     (Nullchan.currentBoard == null)
 
     @element = document.getElementById("header")
-    if document.location.pathname == "/"
-      link = document.getElementById("nullchan-link")
-      link.href = "//0chan.bit"
 
 window.Header = new Header()
 

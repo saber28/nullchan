@@ -645,7 +645,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
     }
 
     Header.prototype.update = function(siteInfo, settings) {
-      var link, ref, ref1;
+      var ref, ref1;
       this.element.outerHTML = Templates.render("header", {
         boardName: (ref = Nullchan.currentBoard) != null ? ref.name : void 0,
         boardAbbr: (ref1 = Nullchan.currentBoard) != null ? ref1.abbr : void 0,
@@ -653,11 +653,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
         siteSize: formatSizeUnits(siteInfo.settings.size),
         noLink: Nullchan.currentBoard === null
       });
-      this.element = document.getElementById("header");
-      if (document.location.pathname === "/") {
-        link = document.getElementById("nullchan-link");
-        return link.href = "//0chan.bit";
-      }
+      return this.element = document.getElementById("header");
     };
 
     return Header;
@@ -1201,13 +1197,21 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
     };
 
     Nullchan.prototype.togglePreloader = function(state) {
-      var active, inactive;
+      var active, el, i, inactive, len, ref;
       if (state === true) {
         inactive = container;
         active = preloader;
       } else {
         inactive = preloader;
         active = container;
+      }
+      if (document.location.pathname === "/") {
+        ref = document.getElementsByClassName("update-link-in-chrome");
+        for (i = 0, len = ref.length; i < len; i++) {
+          el = ref[i];
+          this.log("updating " + (el.getAttribute("href")));
+          el.href = "/" + el.getAttribute("href");
+        }
       }
       inactive.style.display = "none";
       active.style.display = "block";
@@ -1216,7 +1220,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
         return function() {
           return true.className = "";
         };
-      })(this)), 1100);
+      })(this)), 400);
     };
 
     Nullchan.prototype.shortUserName = function(full) {

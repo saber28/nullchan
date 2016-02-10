@@ -94,10 +94,15 @@ class Nullchan extends ZeroFrame
       inactive = preloader
       active   = container
 
+    if document.location.pathname == "/"
+      for el in document.getElementsByClassName("update-link-in-chrome")
+        @log("updating #{el.getAttribute("href")}")
+        el.href = "/" + el.getAttribute("href")
+
     inactive.style.display = "none"
     active.style.display   = "block"
     active.className       = "fadein"
-    setTimeout (=> on.className = ""), 1100
+    setTimeout (=> on.className = ""), 400
 
   shortUserName: (full) =>
     if !full

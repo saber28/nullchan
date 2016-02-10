@@ -171,6 +171,10 @@ hr {
   margin-bottom: 15px;
 }
 
+#glagne hr {
+  margin: 0px !important;
+}
+
 #form-call-button {
   text-align: center;
   cursor: pointer;
@@ -643,6 +647,7 @@ hr.white {
   padding-top: 5px;
   padding-left: 15px;
   color: #ccc !important;
+  // margin: 0px 0px 15px 0px !important;
   margin: 0px !important;
 }
 
