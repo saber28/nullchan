@@ -9,6 +9,11 @@
       "priority": 2,
       "abbr": "b",
       "name": "Random stuff"
+    },
+    {
+      "priority": 3,
+      "abbr": "rus",
+      "name": "Russian"
     }
   ]
 }
