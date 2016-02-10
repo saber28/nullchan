@@ -1,0 +1,14 @@
+{
+  "boards": [
+    {
+      "priority": 1,
+      "abbr": "dev",
+      "name": "0chan dev"
+    },
+    {
+      "priority": 2,
+      "abbr": "b",
+      "name": "Random stuff"
+    }
+  ]
+}
