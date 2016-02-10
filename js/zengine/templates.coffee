@@ -9,6 +9,13 @@ class Templates
   render: (templateName, data) =>
     Mustache.render(@templates[templateName], data)
 
+  fixLinks: =>
+    return unless document.location.pathname == "/"
+    for el in document.getElementsByClassName("update-link-in-chrome")
+      href = el.getAttribute("href")
+      continue if href.substring(0, 2) == "//"
+      el.href = "/" + href
+
   wrapNode: (html) =>
     el = document.createElement("div")
     el.innerHTML = html

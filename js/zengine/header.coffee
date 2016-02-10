@@ -13,6 +13,10 @@ class Header
       noLink:     (Nullchan.currentBoard == null)
 
     @element = document.getElementById("header")
+    Templates.fixLinks()
+
+    if Nullchan.currentPage() in ["list", "thread"]
+      @element.className = "with-border"
 
 window.Header = new Header()
 

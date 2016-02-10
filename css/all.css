@@ -162,7 +162,11 @@ body {
   padding: 10px 0px;
   font-family: 'Share Tech Mono', monospace;
   font-size: 14px;
-  border-bottom: 1px solid #555;
+  border-bottom: 1px solid #222;
+}
+
+#header.with-border {
+  border-color: #555;
 }
 
 hr {
@@ -333,10 +337,21 @@ a:hover {
 }
 
 #preloader {
-  margin: 0 auto;
-  margin-top: 70px;
-  width: 200px;
+  position: absolute;
+  top: 130px;
+  left: 0px;
+  right: 0px;
   text-align: center;
+  display: none;
+}
+
+#preloader.shown {
+  display: block;
+  -webkit-animation: fadein 5s; /* Safari, Chrome and Opera > 12.1 */
+   -moz-animation:   fadein 5s; /* Firefox < 16 */
+    -ms-animation:   fadein 5s; /* Internet Explorer */
+     -o-animation:   fadein 5s; /* Opera < 12.1 */
+        -webkit-animation:   fadein 5s; -moz-animation:   fadein 5s; -o-animation:   fadein 5s; -ms-animation:   fadein 5s; animation:   fadein 5s ;
 }
 
 #preloader div {
@@ -485,11 +500,11 @@ em.quote {
 }
 
 .fadein {
-  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-     -moz-animation: fadein 1s; /* Firefox < 16 */
-      -ms-animation: fadein 1s; /* Internet Explorer */
-       -o-animation: fadein 1s; /* Opera < 12.1 */
-          -webkit-animation: fadein 1s; -moz-animation: fadein 1s; -o-animation: fadein 1s; -ms-animation: fadein 1s; animation: fadein 1s ;
+  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+     -moz-animation: fadein 0.5s; /* Firefox < 16 */
+      -ms-animation: fadein 0.5s; /* Internet Explorer */
+       -o-animation: fadein 0.5s; /* Opera < 12.1 */
+          -webkit-animation: fadein 0.5s; -moz-animation: fadein 0.5s; -o-animation: fadein 0.5s; -ms-animation: fadein 0.5s; animation: fadein 0.5s ;
 }
 
 @keyframes fadein {

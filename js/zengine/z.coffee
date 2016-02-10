@@ -12,6 +12,7 @@ class Nullchan extends ZeroFrame
   init: =>
     @container = document.getElementById("container")
     @preloader = document.getElementById("preloader")    
+    @togglePreloader(true)
 
   onOpenWebsocket: (event) =>
     unless @initialized
@@ -90,27 +91,26 @@ class Nullchan extends ZeroFrame
 
   togglePreloader: (state) =>
     if state == true
-      inactive = container
-      active   = preloader
+      inactive = @container
+      active   = @preloader
+      @preloader.className = ""
+      setTimeout (=> @preloader.className = "shown"), 1000
     else
-      inactive = preloader
-      active   = container
+      inactive = @preloader
+      active   = @container
 
-    if document.location.pathname == "/"
-      for el in document.getElementsByClassName("update-link-in-chrome")
-        @log("updating #{el.getAttribute("href")}")
-        el.href = "/" + el.getAttribute("href")
+    Templates.fixLinks()
 
-    inactive.style.display = "none"
-    active.style.display   = "block"
+    inactive.style.display = "none"  if state == false
+    active.style.display   = "block" if state == false
     active.className       = "fadein"
-    setTimeout (=> on.className = ""), 400
+    setTimeout (=> active.className = ""), 500
 
   shortUserName: (full) =>
     if !full
       full = @siteInfo.cert_user_id
-    if full == "edisontrent@zeroid.bit"
-      return "[dev] edisontrent"
+    if full == "sthetz@zeroid.bit"
+      return "[dev] sthetz"
     if !full
       return full
     return full.split("@")[0]

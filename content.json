@@ -5,30 +5,28 @@
  "domain": "0chan.bit", 
  "files": {
   "css/all.css": {
-   "sha512": "2387f66624b3871174ddd239cafad63f774867cb9d11c479aad1d63ef063de4a", 
-   "size": 10072
+   "sha512": "7633494b586f52dc6769412103b175e7c2b03117366548e9d2093487c70afc49", 
+   "size": 10580
   }, 
   "data/boards.json": {
-   "sha512": "47811358165de2ed04e8e5fe5e3b037d8a1283861fe3cbffe2d1d37ebe619633", 
-   "size": 183
+   "sha512": "8953c945a144c9c8286f9aa351de648a7f570407013b73ba265335f1c5989571", 
+   "size": 263
   }, 
   "dbschema.json": {
    "sha512": "24346ca02199b85ff8e31d6706a99bf4abf18d43df01232a21c0257eb79d24a8", 
    "size": 954
   }, 
-  "index.html": {
-   "sha512": "3b81301b0f88338378f003ec0278b9513caa4850c99a30621a0bb5ef755bffc8", 
-   "size": 6582
-  }, 
-  "js/all.js": {
-   "sha512": "6236d2a17f6897c8431fb73d5dd23bdc79095a059c6a6b5e490b593d3728169c", 
-   "size": 59449
-  }
- }, 
- "files_optional": {
   "img/loading.gif": {
    "sha512": "0a95ae23dde34c14a1defc9b1dee367049e07bb9bf05ec336f258114d8382a7c", 
    "size": 4852
+  }, 
+  "index.html": {
+   "sha512": "eb3335f943ad007271122bcd5212f62b637fd3d697a2d7b964aaefbde06069e2", 
+   "size": 6577
+  }, 
+  "js/all.js": {
+   "sha512": "63d969c95335cdbf3e92b5c3e0443561facf50b0ca63a92e53cc33d4a4404697", 
+   "size": 60197
   }
  }, 
  "ignore": "(.git|data/users|data/0chan.db|js/lib|css/lib|js/zengine).*", 
@@ -38,15 +36,14 @@
    "signers_required": 1
   }
  }, 
- "modified": 1455109505.463136, 
- "optional": ".*\\.(png|jpg|gif)", 
+ "modified": 1455139365.744975, 
  "sign": [
-  14142250017688171035163672298660229892061403996138348418367734344980192925961, 
-  80058992920069040884623503875197304372557259812835530694125973694749612833444
+  104342103871912602925834724820122599387789434666247468149216573897705521850732, 
+  43616348608274633402168686855604703271378626354682704475997891049644188883411
  ], 
  "signers_sign": "G4s9OrWifqYje8P5uJ2Quc+p0IaH4oCLX0jrYpCGBaIC1y7hugLPU8DUWfqXye7vqOhz/IiQWjYkih2PFQ4B+64=", 
  "signs": {
-  "1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6": "HIgGt7mPzHd3rDiCDWeBmtk1my1ll6rxzZy2E3ITPPNy3jgLTA6PWzq8sAeKPdyqTQv2ikkHdPt9bfXK0+CDu0I="
+  "1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6": "G83raJkMam9V+jlkcM4Keywx37JvYWXX3Nw3Kx2wYiwwp44Wg1HTKlOxyE8SchVyc/jZ7NeVfVVsPELZ+TpWpG8="
  }, 
  "signs_required": 1, 
  "title": "0chan", 

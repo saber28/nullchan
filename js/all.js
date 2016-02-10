@@ -654,7 +654,6 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
 }).call(this);
 
 
-
 /* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/js/zengine/header.coffee ---- */
 
 
@@ -671,7 +670,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
     }
 
     Header.prototype.update = function(siteInfo, settings) {
-      var ref, ref1;
+      var ref, ref1, ref2;
       this.element.outerHTML = Templates.render("header", {
         boardName: (ref = Nullchan.currentBoard) != null ? ref.name : void 0,
         boardAbbr: (ref1 = Nullchan.currentBoard) != null ? ref1.abbr : void 0,
@@ -679,7 +678,11 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
         siteSize: formatSizeUnits(siteInfo.settings.size),
         noLink: Nullchan.currentBoard === null
       });
-      return this.element = document.getElementById("header");
+      this.element = document.getElementById("header");
+      Templates.fixLinks();
+      if ((ref2 = Nullchan.currentPage()) === "list" || ref2 === "thread") {
+        return this.element.className = "with-border";
+      }
     };
 
     return Header;
@@ -775,6 +778,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
   Templates = (function() {
     function Templates() {
       this.wrapNode = bind(this.wrapNode, this);
+      this.fixLinks = bind(this.fixLinks, this);
       this.render = bind(this.render, this);
       var i, len, name, ref, script;
       this.templates = {};
@@ -789,6 +793,24 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
 
     Templates.prototype.render = function(templateName, data) {
       return Mustache.render(this.templates[templateName], data);
+    };
+
+    Templates.prototype.fixLinks = function() {
+      var el, href, i, len, ref, results;
+      if (document.location.pathname !== "/") {
+        return;
+      }
+      ref = document.getElementsByClassName("update-link-in-chrome");
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        el = ref[i];
+        href = el.getAttribute("href");
+        if (href.substring(0, 2) === "//") {
+          continue;
+        }
+        results.push(el.href = "/" + href);
+      }
+      return results;
     };
 
     Templates.prototype.wrapNode = function(html) {
@@ -1108,7 +1130,8 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
 
     Nullchan.prototype.init = function() {
       this.container = document.getElementById("container");
-      return this.preloader = document.getElementById("preloader");
+      this.preloader = document.getElementById("preloader");
+      return this.togglePreloader(true);
     };
 
     Nullchan.prototype.onOpenWebsocket = function(event) {
@@ -1225,38 +1248,41 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
     };
 
     Nullchan.prototype.togglePreloader = function(state) {
-      var active, el, i, inactive, len, ref;
+      var active, inactive;
       if (state === true) {
-        inactive = container;
-        active = preloader;
+        inactive = this.container;
+        active = this.preloader;
+        this.preloader.className = "";
+        setTimeout(((function(_this) {
+          return function() {
+            return _this.preloader.className = "shown";
+          };
+        })(this)), 1000);
       } else {
-        inactive = preloader;
-        active = container;
+        inactive = this.preloader;
+        active = this.container;
       }
-      if (document.location.pathname === "/") {
-        ref = document.getElementsByClassName("update-link-in-chrome");
-        for (i = 0, len = ref.length; i < len; i++) {
-          el = ref[i];
-          this.log("updating " + (el.getAttribute("href")));
-          el.href = "/" + el.getAttribute("href");
-        }
+      Templates.fixLinks();
+      if (state === false) {
+        inactive.style.display = "none";
       }
-      inactive.style.display = "none";
-      active.style.display = "block";
+      if (state === false) {
+        active.style.display = "block";
+      }
       active.className = "fadein";
       return setTimeout(((function(_this) {
         return function() {
-          return true.className = "";
+          return active.className = "";
         };
-      })(this)), 400);
+      })(this)), 500);
     };
 
     Nullchan.prototype.shortUserName = function(full) {
       if (!full) {
         full = this.siteInfo.cert_user_id;
       }
-      if (full === "edisontrent@zeroid.bit") {
-        return "[dev] edisontrent";
+      if (full === "sthetz@zeroid.bit") {
+        return "[dev] sthetz";
       }
       if (!full) {
         return full;
