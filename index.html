@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="version" content="0.1.6">
   <title>0chan</title>
   <link href='https://fonts.googleapis.com/css?family=Share+Tech+Mono|Noto+Sans:400,400italic,700,700italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="css/all.css?v=0.1.2" type="text/css" />
+  <link rel="stylesheet" href="css/all.css?v=0.1.6" type="text/css" />
 </head>
 <body>
   <script id="board-list-template" type="x-tmpl-mustache" class="template">
@@ -22,9 +23,6 @@
         </tbody>
       </table>
       <br>
-      <span>
-        last post: <em id="last-post">loading...</em>
-      </span>
     </div>
   </script>
 
@@ -159,14 +157,14 @@
       </pre>
       <hr/>
       <blockquote class="monospace">
-        fork me on <a href="https://github.com/Nullchan/nullchan" target="_parent">GitHub</a> (v 0.1.2)
+        fork me on <a href="https://github.com/Nullchan/nullchan" target="_parent">GitHub</a> (v 0.1.6)
       </blockquote>
 
       <hr/>
       <div class="inner">
         <table>
         <tr>
-          <td>
+          <td class="board-list-container">
             <table id="board-list">
               <thead>
                 <tr>
@@ -174,6 +172,9 @@
                 </tr>                
               </thead>
             </table>
+            <span>
+              last post: <em id="last-post">loading...</em>
+            </span>
           </td>
           <td>
             <blockquote>
@@ -214,6 +215,6 @@
 
   <canvas id="canvas"></canvas>
 
-  <script type="text/javascript" src="js/all.js?v=0.1.2" async></script>
+  <script type="text/javascript" src="js/all.js?v=0.1.6" async></script>
 </body>
 </html>

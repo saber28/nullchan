@@ -9,10 +9,13 @@ class Markup
   }
   
   expressions: [
+    # reflinks
+    # [/&gt;&gt;(\w{10})/, ((match, content) ->
+    #   "<a href=\"##{match[1]}\">&gt;&gt;#{content}</a>"
+    # )],
+
     # quote
     [/^\s*&gt;\s{0,1}(.+?)$/mg, ((match, content) ->
-      if content.substring(0, 3) == "&gt;"
-        return match
       br = "";
       if match[0] == "\n"
         br = "<br>"

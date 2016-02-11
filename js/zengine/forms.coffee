@@ -45,6 +45,7 @@ class Forms
       @uploadPost(modifiedData).then (newPost) =>
         @blurForm(form, false)
         @clearForm(form)
+        SeenCount.setLocalCounter(Nullchan.currentBoard.abbr)
 
         if form.id == "reply-form" or Nullchan.currentPage() == "thread"
           form.style.display = "none" if form.id == "reply-form"
@@ -71,8 +72,10 @@ class Forms
 
   uploadPost: (formData) =>
     new Promise (fulfill, reject) =>
+      Nullchan.timedLog("Calling fileGet on data.json")
       filePath = ("data/users/#{Nullchan.getSiteInfo().auth_address}/data.json")
-      Nullchan.cmd "fileGet", { inner_path: filePath, required: true }, (data) =>
+      Nullchan.cmd "fileGet", { inner_path: filePath, required: false }, (data) =>
+        Nullchan.timedLog("fileGet on data.json DONE: #{!!data}")
         if !!data
           try 
             data = JSON.parse(data)
@@ -129,8 +132,12 @@ class Forms
         imageThumb = canvas.toDataURL("image/jpeg", 1).split(',')[1]
         hash = md5(imageFull)
 
+        Nullchan.timedLog("uploadFile: full image...")
         Nullchan.uploadFile(imageFull, (hash + ".jpg"), false).then (fullPath) =>
+          Nullchan.timedLog("uploadFile: full image DONE!")
+          Nullchan.timedLog("uploadFile: thumb image...")
           Nullchan.uploadFile(imageThumb, (hash + "-thumb.jpg"), false).then (thumbPath) =>
+            Nullchan.timedLog("uploadFile: thumb image DONE!")
             formData.file_thumb = thumbPath
             formData.file_full  = fullPath
             delete formData.file

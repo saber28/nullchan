@@ -32,7 +32,6 @@ class Nullchan extends ZeroFrame
     SeenCount.updateActualCounter().then =>
       if @currentPage() == "main"
         BoardList.renderMainPageBoardList()
-    BoardList.updateLastPost()
     Forms.updateAuthForms()
 
   updateHeader: => 
@@ -135,19 +134,18 @@ class Nullchan extends ZeroFrame
             fulfill(contentJson)
 
   checkOptionalSet: =>
-    @log("Checking optional.")
+    @timedLog("Checking optional.")
     new Promise (fulfill, reject) =>
       if @optionalIsSet == true
-        @log("Already checked! Nothing more to do!")
+        @timedLog("Already checked! Nothing more to do!")
         fulfill()
         return
-
       path = "data/users/#{@siteInfo.auth_address}/content.json"
-      @cmd "fileGet", path, (contentJson) =>
-        @log("fileGet on content.json: #{contentJson}")
+      @cmd "fileGet", { inner_path: path, required: false }, (contentJson) =>
+        @timedLog("fileGet on content.json: #{contentJson}")
         unless contentJson
           @log("NO FILE! Got to create basic file")
-          @publishBasicContentJson().then (contentJson) => 
+          @publishBasicContentJson().then (contentJson) =>
             @log("Basic file created: #{contentJson}, setting optional to it")
             @setOptional(contentJson).then => fulfill()
         else
@@ -166,38 +164,21 @@ class Nullchan extends ZeroFrame
       data = JSON.parse(strJson)
       data.optional = ".*\\.(png|jpg|gif)"
       json_raw = unescape(encodeURIComponent(JSON.stringify(data, undefined, '\t')))
-      @log("Setting optional now!")
-      @log("Json raw: #{json_raw}")
+      @timedLog("setOptional — fileWrite called")
       @cmd "fileWrite", [path, btoa(json_raw)], (write) =>
-        @log("Write on #{path}: #{write}")
+        @timedLog("setOptional — fileWrite responded with `#{write}`")
         if write != "ok"
           alert(JSON.stringify(write))
           alert("Sorry, still testing this one")
-        @cmd "sitePublish", {inner_path: path}, (signResponse) =>
-          @log("sitePublish result: #{JSON.stringify(signResponse)}")
+        @timedLog("setOptional — siteSign called")
+        @cmd "siteSign", {inner_path: path}, (signResponse) =>
+          @timedLog("setOptional — siteSign result: #{JSON.stringify(signResponse)}")
           @optionalIsSet = true
           fulfill()
 
-
-
-
-# @cmd "sitePublish", { sign: false }, (signResponse) =>
-#   @log("sitePublish result: #{JSON.stringify(signResponse)}")
-#   path = "data/users/#{@siteInfo.auth_address}/content.json"
-#   @cmd "fileGet", path, (fileContent) =>
-#     @log("fileGet response: #{JSON.stringify(fileContent)}")
-#     data = JSON.parse(fileContent)
-#     data.optional = ".*\\.(png|jpg|gif)"
-#     json_raw = unescape(encodeURIComponent(JSON.stringify(data, undefined, '\t')))
-#     @log("Json raw: #{json_raw}")
-#     @cmd "fileWrite", [path, btoa(json_raw)], (write) =>
-#       @log("Write on #{path}: #{write}")
-#       if write != "ok"
-#         alert(JSON.stringify(write))
-#         alert("Sorry, still testing this one")
-#       @optionalIsSet = true
-#       fulfill()
-
+  timedLog: (str) =>
+    time = (new Date).toTimeString().split(" ")[0]
+    @log("[#{time}] #{str}")
 
   uploadFile: (rawBase64, fileName, publish) =>
     new Promise (fulfill, reject) =>
@@ -205,12 +186,16 @@ class Nullchan extends ZeroFrame
         dir  = "data/users/#{@siteInfo.auth_address}/"
         path = (dir + fileName)
 
+        @timedLog("fileWrite (#{fileName}) called...")
         @cmd "fileWrite", [path, rawBase64], (write) =>
+          @timedLog("fileWrite (#{fileName}) DONE! (#{write})")
           if write == "ok"
             if publish == false
               fulfill(path)
             else
+              @timedLog("sitePublish (#{path}) called...")
               @cmd "sitePublish", { "inner_path": path }, (publish) =>
+                @timedLog("sitePublish (#{path}) DONE!")
                 if publish == "ok"
                   fulfill(path)
                 else

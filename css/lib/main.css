@@ -497,7 +497,7 @@ hr.white {
   font-size: 13px;
 }
 
-#board-list span {
+#board-list span, .board-list-container span {
   display: table;
   color: #888;
   font-size: 12px;

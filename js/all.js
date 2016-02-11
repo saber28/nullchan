@@ -496,6 +496,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
           return _this.uploadPost(modifiedData).then(function(newPost) {
             _this.blurForm(form, false);
             _this.clearForm(form);
+            SeenCount.setLocalCounter(Nullchan.currentBoard.abbr);
             if (form.id === "reply-form" || Nullchan.currentPage() === "thread") {
               if (form.id === "reply-form") {
                 form.style.display = "none";
@@ -542,12 +543,14 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
       return new Promise((function(_this) {
         return function(fulfill, reject) {
           var filePath;
+          Nullchan.timedLog("Calling fileGet on data.json");
           filePath = "data/users/" + (Nullchan.getSiteInfo().auth_address) + "/data.json";
           return Nullchan.cmd("fileGet", {
             inner_path: filePath,
-            required: true
+            required: false
           }, function(data) {
             var err, error, json;
+            Nullchan.timedLog("fileGet on data.json DONE: " + (!!data));
             if (!!data) {
               try {
                 data = JSON.parse(data);
@@ -618,8 +621,12 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
             ctx.drawImage(image, 0, 0, width, height);
             imageThumb = canvas.toDataURL("image/jpeg", 1).split(',')[1];
             hash = md5(imageFull);
+            Nullchan.timedLog("uploadFile: full image...");
             return Nullchan.uploadFile(imageFull, hash + ".jpg", false).then(function(fullPath) {
+              Nullchan.timedLog("uploadFile: full image DONE!");
+              Nullchan.timedLog("uploadFile: thumb image...");
               return Nullchan.uploadFile(imageThumb, hash + "-thumb.jpg", false).then(function(thumbPath) {
+                Nullchan.timedLog("uploadFile: thumb image DONE!");
                 formData.file_thumb = thumbPath;
                 formData.file_full = fullPath;
                 delete formData.file;
@@ -700,6 +707,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
 }).call(this);
 
 
+
 /* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/js/zengine/header.coffee ---- */
 
 
@@ -766,9 +774,6 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
       [
         /^\s*&gt;\s{0,1}(.+?)$/mg, (function(match, content) {
           var br;
-          if (content.substring(0, 3) === "&gt;") {
-            return match;
-          }
           br = "";
           if (match[0] === "\n") {
             br = "<br>";
@@ -1245,6 +1250,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
 
     function Nullchan() {
       this.uploadFile = bind(this.uploadFile, this);
+      this.timedLog = bind(this.timedLog, this);
       this.setOptional = bind(this.setOptional, this);
       this.checkOptionalSet = bind(this.checkOptionalSet, this);
       this.publishBasicContentJson = bind(this.publishBasicContentJson, this);
@@ -1319,7 +1325,6 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
           }
         };
       })(this));
-      BoardList.updateLastPost();
       return Forms.updateAuthForms();
     };
 
@@ -1482,19 +1487,22 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
     };
 
     Nullchan.prototype.checkOptionalSet = function() {
-      this.log("Checking optional.");
+      this.timedLog("Checking optional.");
       return new Promise((function(_this) {
         return function(fulfill, reject) {
           var path;
           if (_this.optionalIsSet === true) {
-            _this.log("Already checked! Nothing more to do!");
+            _this.timedLog("Already checked! Nothing more to do!");
             fulfill();
             return;
           }
           path = "data/users/" + _this.siteInfo.auth_address + "/content.json";
-          return _this.cmd("fileGet", path, function(contentJson) {
+          return _this.cmd("fileGet", {
+            inner_path: path,
+            required: false
+          }, function(contentJson) {
             var data;
-            _this.log("fileGet on content.json: " + contentJson);
+            _this.timedLog("fileGet on content.json: " + contentJson);
             if (!contentJson) {
               _this.log("NO FILE! Got to create basic file");
               return _this.publishBasicContentJson().then(function(contentJson) {
@@ -1529,24 +1537,30 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
           data = JSON.parse(strJson);
           data.optional = ".*\\.(png|jpg|gif)";
           json_raw = unescape(encodeURIComponent(JSON.stringify(data, void 0, '\t')));
-          _this.log("Setting optional now!");
-          _this.log("Json raw: " + json_raw);
+          _this.timedLog("setOptional — fileWrite called");
           return _this.cmd("fileWrite", [path, btoa(json_raw)], function(write) {
-            _this.log("Write on " + path + ": " + write);
+            _this.timedLog("setOptional — fileWrite responded with `" + write + "`");
             if (write !== "ok") {
               alert(JSON.stringify(write));
               alert("Sorry, still testing this one");
             }
-            return _this.cmd("sitePublish", {
+            _this.timedLog("setOptional — siteSign called");
+            return _this.cmd("siteSign", {
               inner_path: path
             }, function(signResponse) {
-              _this.log("sitePublish result: " + (JSON.stringify(signResponse)));
+              _this.timedLog("setOptional — siteSign result: " + (JSON.stringify(signResponse)));
               _this.optionalIsSet = true;
               return fulfill();
             });
           });
         };
       })(this));
+    };
+
+    Nullchan.prototype.timedLog = function(str) {
+      var time;
+      time = (new Date).toTimeString().split(" ")[0];
+      return this.log("[" + time + "] " + str);
     };
 
     Nullchan.prototype.uploadFile = function(rawBase64, fileName, publish) {
@@ -1556,14 +1570,18 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
             var dir, path;
             dir = "data/users/" + _this.siteInfo.auth_address + "/";
             path = dir + fileName;
+            _this.timedLog("fileWrite (" + fileName + ") called...");
             return _this.cmd("fileWrite", [path, rawBase64], function(write) {
+              _this.timedLog("fileWrite (" + fileName + ") DONE! (" + write + ")");
               if (write === "ok") {
                 if (publish === false) {
                   return fulfill(path);
                 } else {
+                  _this.timedLog("sitePublish (" + path + ") called...");
                   return _this.cmd("sitePublish", {
                     "inner_path": path
                   }, function(publish) {
+                    _this.timedLog("sitePublish (" + path + ") DONE!");
                     if (publish === "ok") {
                       return fulfill(path);
                     } else {
