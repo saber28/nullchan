@@ -38,7 +38,8 @@ class SeenCount
         @getLocalCounter().then (localCounter) =>
           result = {}
           for board in BoardList.boards
-            result[board.abbr] = actualCounter[board.abbr] - localCounter[board.abbr]
+            if localCounter[board.abbr] > 0
+              result[board.abbr] = actualCounter[board.abbr] - localCounter[board.abbr]
           fulfill(result)
 
 window.SeenCount = new SeenCount

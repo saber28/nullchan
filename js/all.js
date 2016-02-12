@@ -707,7 +707,6 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
 }).call(this);
 
 
-
 /* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/js/zengine/header.coffee ---- */
 
 
@@ -910,7 +909,9 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
               ref = BoardList.boards;
               for (i = 0, len = ref.length; i < len; i++) {
                 board = ref[i];
-                result[board.abbr] = actualCounter[board.abbr] - localCounter[board.abbr];
+                if (localCounter[board.abbr] > 0) {
+                  result[board.abbr] = actualCounter[board.abbr] - localCounter[board.abbr];
+                }
               }
               return fulfill(result);
             });
@@ -926,6 +927,7 @@ window.urlRegexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-
   window.SeenCount = new SeenCount;
 
 }).call(this);
+
 
 
 /* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/js/zengine/templates.coffee ---- */

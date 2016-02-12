@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="version" content="0.1.6">
+  <meta name="version" content="0.1.8">
   <title>0chan</title>
   <link href='https://fonts.googleapis.com/css?family=Share+Tech+Mono|Noto+Sans:400,400italic,700,700italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="css/all.css?v=0.1.6" type="text/css" />
+  <link rel="stylesheet" href="css/all.css?v=0.1.8" type="text/css" />
 </head>
 <body>
   <script id="board-list-template" type="x-tmpl-mustache" class="template">
     <div id="board-list">    
-
       <table>
         <tbody>
           {{#boards}}
@@ -157,7 +156,7 @@
       </pre>
       <hr/>
       <blockquote class="monospace">
-        fork me on <a href="https://github.com/Nullchan/nullchan" target="_parent">GitHub</a> (v 0.1.6)
+        fork me on <a href="https://github.com/Nullchan/nullchan" target="_parent">GitHub</a> (v 0.1.8)
       </blockquote>
 
       <hr/>
@@ -180,14 +179,16 @@
             <blockquote>
               <strong>0chan</strong> is an imageboard engine<br>currently in development.
               <br><br>
-              Feel free to leave your feedback, suggest features or just share something you
-              like, this board (though very basically) already works!
+              <em style="color: orange !important;">To 8ch newfriends</em>: welcome! Sorry about the 
+              mess, this site is still very fresh and raw. I didn't advertise it on 8ch, some random guy did. 
+              This is basically just a tech demo which misses a lot of features that you're accustomed to, 
+              but it will get better with time.
               <br>
               <br>
               <hr>
               <span>
                 <em>Current development status:</em>
-                Investigating picture upload speed issues (11.02.2016)
+                Slow posting is fixed, right now I'm refactoring code structure and rewriting everything in ES6 (12.02.2016)
               </span>
               <br>
               &nbsp;
@@ -215,6 +216,6 @@
 
   <canvas id="canvas"></canvas>
 
-  <script type="text/javascript" src="js/all.js?v=0.1.6" async></script>
+  <script type="text/javascript" src="js/all.js?v=0.1.8" async></script>
 </body>
 </html>
