@@ -1,3 +1,126 @@
+
+
+/* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/css/lib/forms.css ---- */
+
+
+#top-form, #reply-form {
+  display: table;
+  width: 416px;
+  color: #aaa;
+}
+
+#top-form {
+  margin: 0 auto;
+}
+
+.form {
+  position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+
+.form.loading  table {
+  -webkit-filter: blur(1px)
+   -moz-filter: blur(1px);
+   -o-filter: blur(1px);
+   -ms-filter: blur(1px);
+   -webkit-filter: blur(1px); -moz-filter: blur(1px); -o-filter: blur(1px); -ms-filter: blur(1px); filter: blur(1px) ;
+   opacity: 0.5;
+}
+
+.form table {
+  position: relative;
+  z-index: 5;
+  border-spacing: 0px 3px;
+}
+
+.form tr td:first-child {
+  font-size: 12px;
+  padding: 3px 5px;
+  width: 100px;
+  background-color: #2C2C2C;
+  border: 1px solid #575757;
+}
+
+.form tr td:last-child {
+  width: 300px;
+  padding: 0px;
+}
+
+.form textarea {
+  width: 295px;
+  min-width: 295px;
+  max-width: 295px;
+  height: 80px;
+  min-height: 80px;
+  max-height: 80px;
+}
+
+.form input[type=text] {
+  width: 295px;
+}
+
+.form input, .form textarea, .form select {
+  margin-left: 7px;
+}
+
+.form input[type=text], textarea {
+  background: #ddd;
+  color: #000;
+}
+
+.form .submit {
+  float: right;
+  width: 70px;
+  font-family: 'Noto Sans', sans-serif !important;
+  font-size: 12px;
+}
+
+.form .auth-form {
+  padding: 0px;
+  margin: 0px;
+}
+
+.form-preloader {
+  display: none;
+}
+
+.form.loading .form-preloader {
+  display: block !important;
+}
+
+.form-preloader {
+  position: absolute;
+  z-index: 10;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  text-align: center;
+}
+
+.form-preloader span {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  color: #ddd;
+  padding: 10px 0px;
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: 30px;
+}
+
+.auth-please {
+  margin-left: 7px;
+}
+
+
+/* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/css/lib/main.css ---- */
+
+
 html, body {
   background: #222;
   color: #fff;
@@ -191,7 +314,7 @@ a:hover {
   border-color: #cf6;
 }
 
-.skip-gap:hover span {
+.skip-gap:hover .expand-button {
   color: #cf6;
 }
 
@@ -228,7 +351,7 @@ a:hover {
    -moz-animation:   fadein 5s; /* Firefox < 16 */
     -ms-animation:   fadein 5s; /* Internet Explorer */
      -o-animation:   fadein 5s; /* Opera < 12.1 */
-        animation:   fadein 5s;
+        -webkit-animation:   fadein 5s; -moz-animation:   fadein 5s; -o-animation:   fadein 5s; -ms-animation:   fadein 5s; animation:   fadein 5s ;
 }
 
 #preloader div {
@@ -255,7 +378,7 @@ a:hover {
 /*input[type="text"], textarea, #thread-form .submit {
   border: 1px solid;
   padding: 5px !important;
-  border-radius: 0px !important;
+  -webkit-border-radius: 0px !important; -moz-border-radius: 0px !important; -o-border-radius: 0px !important; -ms-border-radius: 0px !important; border-radius: 0px !important ;
   font-family: Verdana, sans-serif;
   font-size: 12px;
   background: none;
@@ -381,13 +504,22 @@ em.quote {
      -moz-animation: fadein 0.5s; /* Firefox < 16 */
       -ms-animation: fadein 0.5s; /* Internet Explorer */
        -o-animation: fadein 0.5s; /* Opera < 12.1 */
-          animation: fadein 0.5s;
+          -webkit-animation: fadein 0.5s; -moz-animation: fadein 0.5s; -o-animation: fadein 0.5s; -ms-animation: fadein 0.5s; animation: fadein 0.5s ;
 }
 
 @keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
 
 /* Firefox < 16 */
 @-moz-keyframes fadein {
@@ -422,7 +554,7 @@ em.quote {
   text-decoration: none;
 }
 
-.thread-link span {
+.thread-link span.highlighted {
   text-decoration: underline;
   color: #9cc250;
 }
@@ -498,11 +630,11 @@ hr.white {
 }
 
 #board-list span, .board-list-container span {
-  display: table;
   color: #888;
   font-size: 12px;
   font-family: Trebuchet, "Trebuchet MS", sans-serif;
 }
+
 
 #board-list .unread {
   text-align: right;

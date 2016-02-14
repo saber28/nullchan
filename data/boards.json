@@ -2,17 +2,22 @@
   "boards": [
     {
       "priority": 1,
-      "abbr": "dev",
+      "key": "dev",
       "name": "0chan dev"
     },
     {
       "priority": 2,
-      "abbr": "b",
-      "name": "Random stuff"
+      "key": "pol",
+      "name": "Politics"
     },
     {
       "priority": 3,
-      "abbr": "rus",
+      "key": "b",
+      "name": "Random stuff"
+    },
+    {
+      "priority": 4,
+      "key": "rus",
       "name": "Russian"
     }
   ]

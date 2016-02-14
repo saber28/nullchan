@@ -1,0 +1,13 @@
+{
+  "name": "Nullchan",
+  "version": "0.2.0",
+  "scripts": {
+    "buildLib": "babel js/lib -o js/lib.js",
+    "build":    "babel js/templates js/engine -o js/engine.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.0.0",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0"
+  }
+}

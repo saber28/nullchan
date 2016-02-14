@@ -1,2 +1,3 @@
 /data/users/*
 *.db
+node_modules/*
