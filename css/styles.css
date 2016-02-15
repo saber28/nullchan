@@ -208,7 +208,7 @@ hr {
   color: #cf9;
 }
 
-#form-call-button:hover span {
+#form-call-button:hover span.text {
   color: #fff;
 }
 
@@ -708,3 +708,13 @@ hr.white {
   font-size: 12px;
   color: #888;
 }
+
+.reflink {
+  color: #9cc250;  
+}
+
+.reflink:hover {
+  color: #cf6 !important;
+}
+
+

@@ -5,7 +5,7 @@ class Post extends React.Component {
   }
 
   shortHashsum () {
-    return "#" + this.state.data.hashsum.substring(22, 32)
+    return this.state.data.hashsum.substring(22, 32)
   }
 
   userName () {
@@ -20,7 +20,26 @@ class Post extends React.Component {
     return { __html: Markup.render(this.state.data.body) }
   }
 
+  bodyClick (event) {
+    if (event.target.className == "reflink") {
+      var hash = event.target.innerHTML.substring(8)
+      var post = Threads.shortMap[hash]
+
+      if (!!post) {
+        var node = document.getElementById(`post-${post.hashsum}`)
+        if (!!node) {
+          event.preventDefault()  
+          node.scrollIntoView()
+        }
+      }
+    }
+  }
+
   callForm () {
+    if (View.formBlurred) {
+      return
+    }
+
     if (!!View.postWithReplyForm) {
       View.postWithReplyForm.setState({showForm: false})
     }
@@ -55,7 +74,8 @@ class Post extends React.Component {
     }
 
     if (this.state.showForm == true) {
-      form = <Form hidden={false} ref={(f) => View.rReplyForm = f} isReply={true} />
+      form = <Form hidden={false} ref={(f) => View.rReplyForm = f} 
+        isReply={true} parent={this.state.data.parent || this.state.data.hashsum} />
     }
 
     return (
@@ -70,12 +90,13 @@ class Post extends React.Component {
                 {this.formattedTime()},
               </span>
               &nbsp;
-              <em className="post-id" onClick={this.callForm.bind(this)}>{this.shortHashsum()}</em>
+              <em className="post-id" onClick={this.callForm.bind(this)}>#{this.shortHashsum()}</em>
             </div>
             {button}
           </div>
           {picture}
-          <blockquote className="text" dangerouslySetInnerHTML={this.renderMarkup()}></blockquote>
+          <blockquote className="text" onClick={this.bodyClick} 
+            dangerouslySetInnerHTML={this.renderMarkup()}></blockquote>
         </div>
         {form}
       </div>

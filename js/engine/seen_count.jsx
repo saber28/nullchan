@@ -20,14 +20,18 @@ class SeenCount {
     })
   }
 
-  setLocalCounter (boardAbbr) {
+  setLocalCounter (boardKey, forcePlusOne = false) {
     Promise.all([
       this.getActualCounter(),
       this.getLocalCounter(),
     ]).then((data) => {
       let [actual, local] = data
       var storage = {}
+      local[boardKey] = actual[boardKey]
 
+      if (forcePlusOne) {
+        local[boardKey] = local[boardKey] + 1
+      }
       for (let board of Boards.list) {
         storage[`msg_${board.key}`] = local[board.key] || 0
       }

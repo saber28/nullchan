@@ -28,7 +28,28 @@ class Database {
     })
   }
 
-  static loadMessages (boardKey) {
+  static loadSingleThread (boardKey, threadHash) {
+    return new Promise((resolve) => {
+      var query = `
+        SELECT message.*, keyvalue.value AS cert_user_id FROM message
+        LEFT JOIN json AS data_json USING (json_id)
+        LEFT JOIN json AS content_json ON (
+          data_json.directory = content_json.directory AND content_json.file_name = 'content.json'
+        )
+        LEFT JOIN keyvalue ON (keyvalue.key = 'cert_user_id' AND keyvalue.json_id = content_json.json_id)
+        WHERE message.board = '${boardKey}' AND
+        (message.hashsum = '${threadHash}' OR message.parent = '${threadHash}')
+        ORDER BY message.created_at ASC
+      `
+      console.log(query)
+      this.execute(query).then((response) => { 
+        console.log(response)
+        resolve(response) 
+      })
+    })
+  }
+
+  static loadMessagesOnBoard (boardKey) {
     return new Promise((resolve) => {
       var query = `
         SELECT message.*, keyvalue.value AS cert_user_id FROM message

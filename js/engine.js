@@ -174,10 +174,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Form = function (_React$Component) {
   _inherits(Form, _React$Component);
 
-  function Form() {
+  function Form(props) {
     _classCallCheck(this, Form);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Form).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Form).call(this, props));
+
+    _this.state = props;
+    return _this;
   }
 
   _createClass(Form, [{
@@ -185,16 +188,75 @@ var Form = function (_React$Component) {
     value: function called() {
       var selectedText = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
 
-      console.log("CALLED!");
       this._textarea.focus();
       if (!!selectedText) {
         this._textarea.value = this._textarea.value + selectedText;
       }
     }
   }, {
+    key: "showBlur",
+    value: function showBlur() {
+      View.formBlurred = true;
+      this._node.className = "form loading";
+    }
+  }, {
+    key: "hideBlur",
+    value: function hideBlur() {
+      View.formBlurred = false;
+      this._node.className = "form";
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      this._node.reset();
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      var _this2 = this;
+
+      event.preventDefault();
+      this.showBlur();
+      var data = this.collectFormData();
+      Images.process(data).then(function (modifiedData) {
+        Files.uploadPost(modifiedData).then(function (newPost) {
+          _this2.hideBlur();
+          _this2.clear();
+          SeenCount.setLocalCounter(Nullchan.currentBoard.key, true);
+
+          if (_this2.props.isReply) {
+            if (!!View.postWithReplyForm) {
+              View.postWithReplyForm.setState({ showForm: false });
+              View.postWithReplyForm = null;
+            }
+            Threads.appendPost(newPost);
+          } else {
+            View.rBoardPage.setState({ formShown: false });
+            Nullchan.determineRoute();
+          }
+        });
+      });
+    }
+  }, {
+    key: "collectFormData",
+    value: function collectFormData() {
+      var result = {
+        body: this._node.getElementsByClassName("text")[0].value.trim(),
+        file: this._node.getElementsByClassName("file")[0].files[0],
+        created_at: Helpers.unixTimestamp(),
+        parent: this._node.getElementsByClassName("parent")[0].value
+      };
+      if (!!!result.parent) {
+        result.parent = null;
+      }
+      var name = this._node.getElementsByClassName("name")[0];
+      result.anonymous = name.options[name.selectedIndex].value == "anonymous";
+      return result;
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var display = "block";
       var id = "top-form";
@@ -209,7 +271,10 @@ var Form = function (_React$Component) {
 
       return React.createElement(
         "form",
-        { id: id, className: "form", style: { display: display } },
+        { id: id, className: "form", style: { display: display },
+          onSubmit: this.handleSubmit.bind(this), ref: function ref(f) {
+            return _this3._node = f;
+          } },
         React.createElement(
           "div",
           { className: "form-preloader" },
@@ -238,9 +303,9 @@ var Form = function (_React$Component) {
                 null,
                 React.createElement("textarea", { placeholder: "Up to 3000 symbols, required if no file attached",
                   name: "body", className: "text", ref: function ref(t) {
-                    return _this2._textarea = t;
+                    return _this3._textarea = t;
                   } }),
-                React.createElement("input", { type: "hidden", name: "parent", className: "parent" })
+                React.createElement("input", { type: "hidden", name: "parent", className: "parent", value: this.state.parent })
               )
             ),
             React.createElement(
@@ -317,11 +382,11 @@ var FormButton = function (_React$Component) {
 
       return React.createElement(
         "div",
-        { id: "form-call-button", style: { display: display } },
+        { id: "form-call-button", style: { display: display }, onClick: this.handleClick },
         "[ ",
         React.createElement(
           "span",
-          { onClick: this.handleClick },
+          { className: "text" },
           this.props.text
         ),
         " ]"
@@ -668,7 +733,7 @@ var Post = function (_React$Component) {
   _createClass(Post, [{
     key: "shortHashsum",
     value: function shortHashsum() {
-      return "#" + this.state.data.hashsum.substring(22, 32);
+      return this.state.data.hashsum.substring(22, 32);
     }
   }, {
     key: "userName",
@@ -686,9 +751,29 @@ var Post = function (_React$Component) {
       return { __html: Markup.render(this.state.data.body) };
     }
   }, {
+    key: "bodyClick",
+    value: function bodyClick(event) {
+      if (event.target.className == "reflink") {
+        var hash = event.target.innerHTML.substring(8);
+        var post = Threads.shortMap[hash];
+
+        if (!!post) {
+          var node = document.getElementById("post-" + post.hashsum);
+          if (!!node) {
+            event.preventDefault();
+            node.scrollIntoView();
+          }
+        }
+      }
+    }
+  }, {
     key: "callForm",
     value: function callForm() {
       var _this2 = this;
+
+      if (View.formBlurred) {
+        return;
+      }
 
       if (!!View.postWithReplyForm) {
         View.postWithReplyForm.setState({ showForm: false });
@@ -737,7 +822,8 @@ var Post = function (_React$Component) {
       if (this.state.showForm == true) {
         form = React.createElement(Form, { hidden: false, ref: function ref(f) {
             return View.rReplyForm = f;
-          }, isReply: true });
+          },
+          isReply: true, parent: this.state.data.parent || this.state.data.hashsum });
       }
 
       return React.createElement(
@@ -765,13 +851,15 @@ var Post = function (_React$Component) {
               React.createElement(
                 "em",
                 { className: "post-id", onClick: this.callForm.bind(this) },
+                "#",
                 this.shortHashsum()
               )
             ),
             button
           ),
           picture,
-          React.createElement("blockquote", { className: "text", dangerouslySetInnerHTML: this.renderMarkup() })
+          React.createElement("blockquote", { className: "text", onClick: this.bodyClick,
+            dangerouslySetInnerHTML: this.renderMarkup() })
         ),
         form
       );
@@ -1000,13 +1088,27 @@ var Database = function () {
       });
     }
   }, {
-    key: "loadMessages",
-    value: function loadMessages(boardKey) {
+    key: "loadSingleThread",
+    value: function loadSingleThread(boardKey, threadHash) {
       var _this3 = this;
 
       return new Promise(function (resolve) {
-        var query = "\n        SELECT message.*, keyvalue.value AS cert_user_id FROM message\n        LEFT JOIN json AS data_json USING (json_id)\n        LEFT JOIN json AS content_json ON (\n          data_json.directory = content_json.directory AND content_json.file_name = 'content.json'\n        )\n        LEFT JOIN keyvalue ON (keyvalue.key = 'cert_user_id' AND keyvalue.json_id = content_json.json_id)\n        WHERE message.board = '" + boardKey + "'\n      ";
+        var query = "\n        SELECT message.*, keyvalue.value AS cert_user_id FROM message\n        LEFT JOIN json AS data_json USING (json_id)\n        LEFT JOIN json AS content_json ON (\n          data_json.directory = content_json.directory AND content_json.file_name = 'content.json'\n        )\n        LEFT JOIN keyvalue ON (keyvalue.key = 'cert_user_id' AND keyvalue.json_id = content_json.json_id)\n        WHERE message.board = '" + boardKey + "' AND\n        (message.hashsum = '" + threadHash + "' OR message.parent = '" + threadHash + "')\n        ORDER BY message.created_at ASC\n      ";
+        console.log(query);
         _this3.execute(query).then(function (response) {
+          console.log(response);
+          resolve(response);
+        });
+      });
+    }
+  }, {
+    key: "loadMessagesOnBoard",
+    value: function loadMessagesOnBoard(boardKey) {
+      var _this4 = this;
+
+      return new Promise(function (resolve) {
+        var query = "\n        SELECT message.*, keyvalue.value AS cert_user_id FROM message\n        LEFT JOIN json AS data_json USING (json_id)\n        LEFT JOIN json AS content_json ON (\n          data_json.directory = content_json.directory AND content_json.file_name = 'content.json'\n        )\n        LEFT JOIN keyvalue ON (keyvalue.key = 'cert_user_id' AND keyvalue.json_id = content_json.json_id)\n        WHERE message.board = '" + boardKey + "'\n      ";
+        _this4.execute(query).then(function (response) {
           resolve(response);
         });
       });
@@ -1014,6 +1116,233 @@ var Database = function () {
   }]);
 
   return Database;
+}();
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Files = function () {
+  function Files() {
+    _classCallCheck(this, Files);
+
+    this.optionalOK = false;
+  }
+
+  _createClass(Files, [{
+    key: "path",
+    value: function path(fileName) {
+      return "data/users/" + Nullchan.siteInfo.auth_address + "/" + fileName;
+    }
+  }, {
+    key: "checkIfOptionalOK",
+    value: function checkIfOptionalOK() {
+      var _this = this;
+
+      return new Promise(function (resolve) {
+        if (_this.optionalOK == true) {
+          resolve();
+          return;
+        }
+        var options = { inner_path: _this.path("content.json"), required: false };
+        Nullchan.cmd("fileGet", options, function (contentJson) {
+          if (!!!contentJson) {
+            _this.publishBasicContentJson().then(function (contentJson) {
+              _this.setOptional(contentJson).then(function () {
+                resolve();
+              });
+            });
+          } else {
+            var data = JSON.parse(contentJson);
+            if (data.optional == ".*\\.(png|jpg|gif)") {
+              _this.setOptional(contentJson).then(function () {
+                resolve();
+              });
+            } else {
+              _this.optionalOK = true;
+              resolve();
+            }
+          }
+        });
+      });
+    }
+  }, {
+    key: "publishBasicContentJson",
+    value: function publishBasicContentJson() {
+      var _this2 = this;
+
+      return new Promise(function (resolve) {
+        var path = _this2.path("test.txt");
+        Nullchan.cmd("fileWrite", [path, btoa("fuck this")], function (write) {
+          Nullchan.cmd("siteSign", { inner_path: path }, function (basicResponse) {
+            Nullchan.cmd("fileGet", _this2.path("content.json"), function (contentJson) {
+              resolve(contentJson);
+            });
+          });
+        });
+      });
+    }
+  }, {
+    key: "setOptional",
+    value: function setOptional(strJson) {
+      var _this3 = this;
+
+      return new Promise(function (resolve) {
+        var path = _this3.path("content.json");
+        var data = JSON.parse(strJson);
+        data.optional = ".*\\.(png|jpg|gif)";
+        var json_raw = unescape(encodeURIComponent(JSON.stringify(data, undefined, '\t')));
+
+        Nullchan.cmd("fileWrite", [path, btoa(json_raw)], function (write) {
+          if (write != "ok") {
+            alert(JSON.stringify(write));
+            alert("Sorry, still testing this one");
+          }
+          Nullchan.cmd("siteSign", { inner_path: path }, function (signResponse) {
+            _this3.optionalOK = true;
+            resolve();
+          });
+        });
+      });
+    }
+  }, {
+    key: "uploadFile",
+    value: function uploadFile(rawBase64, fileName, publish) {
+      var _this4 = this;
+
+      return new Promise(function (resolve, reject) {
+        _this4.checkIfOptionalOK().then(function () {
+          var path = _this4.path(fileName);
+          Nullchan.cmd("fileWrite", [path, rawBase64], function (write) {
+            if (write == "ok") {
+              if (publish == false) {
+                resolve(path);
+              } else {
+                Nullchan.cmd("sitePublish", { "inner_path": path }, function (publish) {
+                  if (publish == "ok") {
+                    resolve(path);
+                  } else {
+                    reject(publish);
+                  }
+                });
+              }
+            } else {
+              reject(write);
+            }
+          });
+        });
+      });
+    }
+  }, {
+    key: "uploadPost",
+    value: function uploadPost(formData) {
+      var _this5 = this;
+
+      return new Promise(function (resolve, reject) {
+        Nullchan.cmd("fileGet", { inner_path: _this5.path("data.json"), required: false }, function (data) {
+          if (!!data) {
+            try {
+              data = JSON.parse(data);
+            } catch (err) {
+              data = { message: [] };
+            }
+          } else {
+            data = { message: [] };
+          }
+
+          formData.hashsum = md5(JSON.stringify(formData));
+          formData.board = Nullchan.currentBoard.key;
+          data.message.push(formData);
+          var json = unescape(encodeURIComponent(JSON.stringify(data, undefined, '  ')));
+
+          _this5.uploadFile(btoa(json), "data.json", true).then(function () {
+            resolve(formData);
+          }).catch(function (err) {
+            reject(err);
+          });
+        });
+      });
+    }
+  }]);
+
+  return Files;
+}();
+
+window.Files = new Files();
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Images = function () {
+  function Images() {
+    _classCallCheck(this, Images);
+  }
+
+  _createClass(Images, null, [{
+    key: "process",
+    value: function process(formData) {
+      return new Promise(function (resolve) {
+        if (!!!formData.file) {
+          delete formData.file;
+          return resolve(formData);
+        }
+
+        var image = document.createElement("img");
+        var reader = new FileReader();
+
+        reader.onload = function (event) {
+          image.src = event.target.result;
+        };
+        image.onload = function () {
+          var canvas = document.createElement("canvas");
+          var ctx = canvas.getContext("2d");
+          canvas.width = image.width;
+          canvas.height = image.height;
+          ctx.drawImage(image, 0, 0, image.width, image.height);
+          var imageFull = canvas.toDataURL("image/jpeg", 1).split(',')[1];
+          var maxWidth = 200;
+          var maxHeight = 200;
+          var width = image.width;
+          var height = image.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height *= maxWidth / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width *= maxHeight / height;
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx = canvas.getContext("2d");
+          ctx.drawImage(image, 0, 0, width, height);
+
+          var imageThumb = canvas.toDataURL("image/jpeg", 1).split(',')[1];
+          var hash = md5(imageFull);
+
+          Files.uploadFile(imageFull, hash + ".jpg", false).then(function (fullPath) {
+            Files.uploadFile(imageThumb, hash + "-thumb.jpg", false).then(function (thumbPath) {
+              formData.file_thumb = thumbPath;
+              formData.file_full = fullPath;
+              delete formData.file;
+              resolve(formData);
+            });
+          });
+        };
+        reader.readAsDataURL(formData.file);
+      });
+    }
+  }]);
+
+  return Images;
 }();
 "use strict";
 
@@ -1035,6 +1364,18 @@ var Markup = function () {
     };
 
     this.expressions = [
+    // reflinks
+    [/&gt;&gt;(\w+)/mg, function (match, content) {
+      var post = Threads.shortMap[content];
+      if (!!!post) {
+        return match;
+      }
+
+      var parent = post.parent || post.hashsum;
+      var url = Helpers.fixLink("/0chan.bit/?/" + post.board + "/thread/" + parent + "/" + content);
+      return "<a class=\"reflink\" href=\"" + url + "\">&gt;&gt;" + content + "</a>";
+    }],
+
     // quote
     [/^\s*&gt;\s{0,1}(.+?)$/mg, function (match, content) {
       var br = "";
@@ -1156,7 +1497,9 @@ var SeenCount = function () {
     }
   }, {
     key: "setLocalCounter",
-    value: function setLocalCounter(boardAbbr) {
+    value: function setLocalCounter(boardKey) {
+      var forcePlusOne = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
       Promise.all([this.getActualCounter(), this.getLocalCounter()]).then(function (data) {
         var _data = _slicedToArray(data, 2);
 
@@ -1164,7 +1507,11 @@ var SeenCount = function () {
         var local = _data[1];
 
         var storage = {};
+        local[boardKey] = actual[boardKey];
 
+        if (forcePlusOne) {
+          local[boardKey] = local[boardKey] + 1;
+        }
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
@@ -1296,8 +1643,31 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Threads = function () {
+  _createClass(Threads, [{
+    key: "cachedPosts",
+    get: function get() {
+      return this._cachedPosts;
+    }
+  }, {
+    key: "shortMap",
+    get: function get() {
+      return this._shortMap;
+    }
+  }, {
+    key: "lastPostTime",
+    get: function get() {
+      if (!this._lastPost) {
+        return "N/A";
+      }
+      return Helpers.timeSince(this._lastPost.created_at);
+    }
+  }]);
+
   function Threads() {
     _classCallCheck(this, Threads);
+
+    this._shortMap = {};
+    this._cachedPosts = {};
   }
 
   _createClass(Threads, [{
@@ -1313,59 +1683,92 @@ var Threads = function () {
       });
     }
   }, {
-    key: "load",
-    value: function load() {
+    key: "loadSingle",
+    value: function loadSingle(threadHash) {
       var _this2 = this;
 
       return new Promise(function (resolve) {
-        Database.loadMessages(Nullchan.currentBoard.key).then(function (messages) {
-          var posts = {};
-          var threads = [];
-
-          var _iteratorNormalCompletion = true;
-          var _didIteratorError = false;
-          var _iteratorError = undefined;
-
-          try {
-            for (var _iterator = messages[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-              var post = _step.value;
-
-              var threadHash = post.parent || post.hashsum;
-              if (!!!posts[threadHash]) {
-                posts[threadHash] = { opening: null, replies: [] };
-              }
-              if (post.parent == null) {
-                posts[threadHash].opening = post;
-              } else {
-                posts[threadHash].replies.push(post);
-              }
-            }
-          } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-              }
-            } finally {
-              if (_didIteratorError) {
-                throw _iteratorError;
-              }
-            }
-          }
-
-          _this2._cachedPosts = posts;
-          for (var hash in _this2.cachedPosts) {
-            var post = _this2.cachedPosts[hash];
-            if (!!!post.opening) {
-              continue;
-            }
-            threads.push([post.opening].concat(post.replies.sort(_this2.sortPosts)));
-          }
-          resolve(threads.sort(_this2.sortThreads));
+        Database.loadSingleThread(Nullchan.currentBoard.key, threadHash).then(function (messages) {
+          resolve(_this2.buildThreads(messages));
         });
       });
+    }
+  }, {
+    key: "buildThreads",
+    value: function buildThreads(messages) {
+      var posts = {};
+      var threads = [];
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = messages[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var post = _step.value;
+
+          this._shortMap[post.hashsum.substring(22, 32)] = post;
+          var threadHash = post.parent || post.hashsum;
+          if (!!!posts[threadHash]) {
+            posts[threadHash] = { opening: null, replies: [] };
+          }
+          if (post.parent == null) {
+            posts[threadHash].opening = post;
+          } else {
+            posts[threadHash].replies.push(post);
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      this._cachedPosts = posts;
+      for (var hash in this.cachedPosts) {
+        var post = this.cachedPosts[hash];
+        if (!!!post.opening) {
+          continue;
+        }
+        threads.push([post.opening].concat(post.replies.sort(this.sortPosts)));
+      }
+
+      return threads.sort(this.sortThreads);
+    }
+  }, {
+    key: "loadAll",
+    value: function loadAll() {
+      var _this3 = this;
+
+      return new Promise(function (resolve) {
+        Database.loadMessagesOnBoard(Nullchan.currentBoard.key).then(function (messages) {
+          resolve(_this3.buildThreads(messages));
+        });
+      });
+    }
+  }, {
+    key: "appendPost",
+    value: function appendPost(newPost) {
+      this._shortMap[newPost.hashsum.substring(22, 32)] = newPost;
+      var parentHash = newPost.parent || newPost.hashsum;
+      if (!!this.cachedPosts[parentHash]) {
+        this._cachedPosts[parentHash].replies.push(newPost);
+        if (!!View.rBoardPage.threadMap[parentHash]) {
+          var thread = this._cachedPosts[parentHash];
+          var posts = [thread.opening].concat(thread.replies.sort(this.sortPosts));
+
+          View.rBoardPage.threadMap[parentHash].setState({ posts: posts });
+        }
+      }
     }
   }, {
     key: "sortPosts",
@@ -1382,19 +1785,6 @@ var Threads = function () {
         return -1;
       }
       return 1;
-    }
-  }, {
-    key: "cachedPosts",
-    get: function get() {
-      return this._cachedPosts;
-    }
-  }, {
-    key: "lastPostTime",
-    get: function get() {
-      if (!this._lastPost) {
-        return "N/A";
-      }
-      return Helpers.timeSince(this._lastPost.created_at);
     }
   }]);
 
@@ -1480,7 +1870,6 @@ var View = function () {
 
       if (!!Nullchan.currentBoard && !!this.rHeader) {
         this.rHeader.setState({ board: Nullchan.currentBoard });
-        // this.rHeader.link.setState({boardName: "hui", boardKey: "dick"})
       }
     }
   }, {
@@ -1503,9 +1892,22 @@ var View = function () {
     value: function renderBoard() {
       var _this4 = this;
 
-      Threads.load().then(function (threads) {
+      var threadHash = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
+      var promise;
+      if (threadHash == null) {
+        promise = Threads.loadAll();
+      } else {
+        promise = Threads.loadSingle(threadHash);
+      }
+
+      promise.then(function (threads) {
+        console.log(threads);
         _this4.rBoardPage = ReactDOM.render(React.createElement(BoardPage, { formShown: false, threads: threads }), _this4.container);
         _this4.hidePreloader();
+        if (Nullchan.currentPage == "list") {
+          SeenCount.setLocalCounter(Nullchan.currentBoard.key);
+        }
       });
     }
   }, {
@@ -1626,6 +2028,9 @@ var Nullchan = function (_ZeroFrame) {
             if (_this4.currentPath.length == 1) {
               _this4.currentPage = "list";
               View.renderBoard();
+            } else if (_this4.currentPath[1] == "thread") {
+              _this4.currentPage = "thread";
+              View.renderBoard(_this4.currentPath[2]);
             }
           }
         }

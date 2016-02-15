@@ -57,6 +57,9 @@ class Nullchan extends ZeroFrame {
           if (this.currentPath.length == 1) {
             this.currentPage = "list"
             View.renderBoard()
+          } else if (this.currentPath[1] == "thread") {
+            this.currentPage = "thread"
+            View.renderBoard(this.currentPath[2])
           }
         }
       }

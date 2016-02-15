@@ -12,8 +12,8 @@ class FormButton extends React.Component {
     }
 
     return (
-      <div id="form-call-button" style={{display}}>
-        [ <span onClick={this.handleClick}>{this.props.text}</span> ]
+      <div id="form-call-button" style={{display}} onClick={this.handleClick}>
+        [ <span className="text">{this.props.text}</span> ]
       </div>
     )
   }

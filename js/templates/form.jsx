@@ -1,10 +1,67 @@
 class Form extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = props
+  }
+
   called (selectedText = null) {
-    console.log("CALLED!")
     this._textarea.focus()
     if (!!selectedText) {
       this._textarea.value = this._textarea.value + selectedText
     }
+  }
+
+  showBlur () {
+    View.formBlurred = true
+    this._node.className = "form loading"
+  }
+
+  hideBlur () {
+    View.formBlurred = false
+    this._node.className = "form"
+  }
+
+  clear () {
+    this._node.reset()
+  }
+
+  handleSubmit (event) {
+    event.preventDefault()
+    this.showBlur()
+    var data = this.collectFormData()
+    Images.process(data).then((modifiedData) => {
+      Files.uploadPost(modifiedData).then((newPost) => {
+        this.hideBlur()
+        this.clear()
+        SeenCount.setLocalCounter(Nullchan.currentBoard.key, true)
+
+        if (this.props.isReply) {
+          if (!!View.postWithReplyForm) {
+            View.postWithReplyForm.setState({showForm: false})
+            View.postWithReplyForm = null
+          }
+          Threads.appendPost(newPost)
+        } else {
+          View.rBoardPage.setState({formShown: false})
+          Nullchan.determineRoute()
+        }
+      })
+    })
+  }
+
+  collectFormData () {
+    var result = {
+      body:       this._node.getElementsByClassName("text")[0].value.trim(),
+      file:       this._node.getElementsByClassName("file")[0].files[0],
+      created_at: Helpers.unixTimestamp(),
+      parent:     this._node.getElementsByClassName("parent")[0].value,
+    }
+    if (!!!result.parent) {
+      result.parent = null
+    }
+    var name = this._node.getElementsByClassName("name")[0]
+    result.anonymous = (name.options[name.selectedIndex].value == "anonymous")
+    return result
   }
 
   render () {
@@ -20,7 +77,8 @@ class Form extends React.Component {
     }
 
     return (
-      <form id={id} className="form" style={{display}}>
+      <form id={id} className="form" style={{display}} 
+        onSubmit={this.handleSubmit.bind(this)} ref={(f) => this._node = f}>
         <div className="form-preloader">
           <span>
             sending your message...
@@ -34,7 +92,7 @@ class Form extends React.Component {
                 <textarea placeholder="Up to 3000 symbols, required if no file attached" 
                   name="body" className="text" ref={(t) => this._textarea = t}>
                 </textarea>
-                <input type="hidden" name="parent" className="parent"/>
+                <input type="hidden" name="parent" className="parent" value={this.state.parent} />
               </td>
             </tr>
             <tr>

@@ -36,7 +36,6 @@ class View {
 
     if (!!Nullchan.currentBoard && !!this.rHeader) {
       this.rHeader.setState({board: Nullchan.currentBoard})
-      // this.rHeader.link.setState({boardName: "hui", boardKey: "dick"})
     }
   }
 
@@ -54,12 +53,23 @@ class View {
     })
   }
 
-  renderBoard () {
-    Threads.load().then((threads) => {
+  renderBoard (threadHash = null) {
+    var promise
+    if (threadHash == null) {
+      promise = Threads.loadAll()
+    } else {
+      promise = Threads.loadSingle(threadHash)
+    }
+
+    promise.then((threads) => {
+      console.log(threads)
       this.rBoardPage = ReactDOM.render(
         <BoardPage formShown={false} threads={threads} />, this.container
       )
       this.hidePreloader()
+      if (Nullchan.currentPage == "list") {
+        SeenCount.setLocalCounter(Nullchan.currentBoard.key)  
+      }
     })
   }
 
