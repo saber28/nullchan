@@ -6,7 +6,7 @@ class Markup {
       ">": "&gt;",
       '"': '&quot;',
       "'": '&#39;',
-      "/": '&#x2F;',
+      // "/": '&#x2F;',
     }
 
     this.expressions = [
@@ -60,6 +60,19 @@ class Markup {
 
   render (content) {
     content = this.escapeHTML(content).trim()
+    content = content.replace(URL_REGEXP, (match, text) => {
+      if (match.includes('@') || !match.startsWith("http")) {
+        return match
+      }
+      var link = match
+      if (link.length > 50) {
+        link = link.substring(0, 50) + "..."
+      }
+      link  = link.replace("&amp;", "&")
+      match = match.replace("&amp;", "&")
+      return `<a href='${match}' target='_parent' data-no-push='true'>${link}</a>`
+    })
+
     for (let exp of this.expressions) {
       content = content.replace(exp[0], exp[1])
     }
@@ -67,7 +80,7 @@ class Markup {
   }
 
   escapeHTML (raw) {
-    return String(raw.trim()).replace(/[&<>"'\/]/g, (s) => {
+    return String(raw.trim()).replace(/[&<>"']/g, (s) => {
       return this.entityMap[s]
     })
   }

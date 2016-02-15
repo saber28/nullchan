@@ -111,6 +111,7 @@ class Thread extends React.Component {
   }
 
   render() {
+    console.log(URL_REGEXP)
     var skip = ""
     var rest = 1
     if (this.state.full == false) {

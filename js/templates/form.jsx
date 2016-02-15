@@ -41,6 +41,7 @@ class Form extends React.Component {
             View.postWithReplyForm = null
           }
           Threads.appendPost(newPost)
+          setTimeout(() => { SeenCount.setLocalCounter(Nullchan.currentBoard.key) }, 2000)
         } else {
           View.rBoardPage.setState({formShown: false})
           Nullchan.determineRoute()

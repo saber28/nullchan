@@ -709,11 +709,11 @@ hr.white {
   color: #888;
 }
 
-.reflink {
+.post .text a {
   color: #9cc250;  
 }
 
-.reflink:hover {
+.post .text a:hover {
   color: #cf6 !important;
 }
 

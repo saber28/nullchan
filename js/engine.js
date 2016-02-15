@@ -230,6 +230,9 @@ var Form = function (_React$Component) {
               View.postWithReplyForm = null;
             }
             Threads.appendPost(newPost);
+            setTimeout(function () {
+              SeenCount.setLocalCounter(Nullchan.currentBoard.key);
+            }, 2000);
           } else {
             View.rBoardPage.setState({ formShown: false });
             Nullchan.determineRoute();
@@ -884,6 +887,7 @@ var Thread = function (_React$Component2) {
   _createClass(Thread, [{
     key: "render",
     value: function render() {
+      console.log(URL_REGEXP);
       var skip = "";
       var rest = 1;
       if (this.state.full == false) {
@@ -1359,10 +1363,10 @@ var Markup = function () {
       "<": "&lt;",
       ">": "&gt;",
       '"': '&quot;',
-      "'": '&#39;',
-      "/": '&#x2F;'
+      "'": '&#39;'
     };
 
+    // "/": '&#x2F;',
     this.expressions = [
     // reflinks
     [/&gt;&gt;(\w+)/mg, function (match, content) {
@@ -1413,6 +1417,19 @@ var Markup = function () {
     key: "render",
     value: function render(content) {
       content = this.escapeHTML(content).trim();
+      content = content.replace(URL_REGEXP, function (match, text) {
+        if (match.includes('@') || !match.startsWith("http")) {
+          return match;
+        }
+        var link = match;
+        if (link.length > 50) {
+          link = link.substring(0, 50) + "...";
+        }
+        link = link.replace("&amp;", "&");
+        match = match.replace("&amp;", "&");
+        return "<a href='" + match + "' target='_parent' data-no-push='true'>" + link + "</a>";
+      });
+
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -1445,7 +1462,7 @@ var Markup = function () {
     value: function escapeHTML(raw) {
       var _this = this;
 
-      return String(raw.trim()).replace(/[&<>"'\/]/g, function (s) {
+      return String(raw.trim()).replace(/[&<>"']/g, function (s) {
         return _this.entityMap[s];
       });
     }
@@ -1792,6 +1809,9 @@ var Threads = function () {
 }();
 
 window.Threads = new Threads();
+"use strict";
+
+var URL_REGEXP = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((\:\d+)?(?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_\#\/\?\*\:]*))?)/mg;
 "use strict";
 
 var VERSION = "0.2.0";
