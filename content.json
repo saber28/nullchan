@@ -68,6 +68,10 @@
    "sha512": "8be9910e5943f9aa95cd66f4343b25613d6445c6254b13f0cb6029fe3b59a80f", 
    "size": 2762
   }, 
+  "js/lib.js": {
+   "sha512": "9fe2898b709b5aee7c97d732375722b0671706cfc254a4cf6e35a4907e7be6d9", 
+   "size": 595520
+  }, 
   "js/templates/auth_form.jsx": {
    "sha512": "7b80080854a7617927d2f917d2288870c594f8dabc6730daf5c46bf82bb0b493", 
    "size": 1191
@@ -105,21 +109,21 @@
    "size": 302
   }
  }, 
- "ignore": "(.git|data/users|node_modules|data/0chan.db|js/lib|css/lib|js/zengine).*", 
+ "ignore": "(.git|data/users|node_modules|data/0chan.db|js/libs|css/lib|js/zengine).*", 
  "includes": {
   "data/users/content.json": {
    "signers": [], 
    "signers_required": 1
   }
  }, 
- "modified": 1455495875.148849, 
+ "modified": 1455495991.898739, 
  "sign": [
-  49631562194878872200423402525975988547015103665590368144206317045568039380429, 
-  114852159157897586005120072287333414998327426397153316998486740992349707649282
+  25015328224740304070187049415021277973005791078057553924646303136708671976877, 
+  97738410353201474866458198782044488559422466706959158003433276039552915476601
  ], 
  "signers_sign": "G4s9OrWifqYje8P5uJ2Quc+p0IaH4oCLX0jrYpCGBaIC1y7hugLPU8DUWfqXye7vqOhz/IiQWjYkih2PFQ4B+64=", 
  "signs": {
-  "1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6": "HLknzHlT72fuDn8zVYDfp///lA82+gffOJTlb6TC9XPBJ7vAgwow5jW+AHR02yzGJNEBcXaN6HBZremXBrpOeC0="
+  "1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6": "G26/9/a76HYFggeDNTQyiF115+Ros4zkstumth7JHotZ5ZOtbH6JHJrqd8hbioNwy7YubTWJPWlBixARN20CLnY="
  }, 
  "signs_required": 1, 
  "title": "0chan", 
