@@ -7,9 +7,11 @@ class BoardPage extends React.Component {
 
   render () {
     var content = ""
+    var parent = null 
     var buttonText = "create new thread"
     if (Nullchan.currentPage == "thread") { 
       buttonText = "reply to this thread"
+      parent = this.props.threads[0][0].hashsum
     }
 
     if (!!!this.props.threads) {
@@ -31,7 +33,7 @@ class BoardPage extends React.Component {
     return (
       <div id="board-page">
         <FormButton text={buttonText} hidden={this.state.formShown} />
-        <Form hidden={!this.state.formShown} ref={(f) => this.rForm = f} />
+        <Form hidden={!this.state.formShown} ref={(f) => this.rForm = f} parent={parent} />
         <hr />
         {content}
       </div>

@@ -41,9 +41,7 @@ class Database {
         (message.hashsum = '${threadHash}' OR message.parent = '${threadHash}')
         ORDER BY message.created_at ASC
       `
-      console.log(query)
       this.execute(query).then((response) => { 
-        console.log(response)
         resolve(response) 
       })
     })

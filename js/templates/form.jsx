@@ -35,7 +35,7 @@ class Form extends React.Component {
         this.clear()
         SeenCount.setLocalCounter(Nullchan.currentBoard.key, true)
 
-        if (this.props.isReply) {
+        if (!!this.state.parent) {
           if (!!View.postWithReplyForm) {
             View.postWithReplyForm.setState({showForm: false})
             View.postWithReplyForm = null

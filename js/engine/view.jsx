@@ -62,7 +62,6 @@ class View {
     }
 
     promise.then((threads) => {
-      console.log(threads)
       this.rBoardPage = ReactDOM.render(
         <BoardPage formShown={false} threads={threads} />, this.container
       )

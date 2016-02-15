@@ -119,9 +119,11 @@ var BoardPage = function (_React$Component) {
       var _this2 = this;
 
       var content = "";
+      var parent = null;
       var buttonText = "create new thread";
       if (Nullchan.currentPage == "thread") {
         buttonText = "reply to this thread";
+        parent = this.props.threads[0][0].hashsum;
       }
 
       if (!!!this.props.threads) {
@@ -152,7 +154,7 @@ var BoardPage = function (_React$Component) {
         React.createElement(FormButton, { text: buttonText, hidden: this.state.formShown }),
         React.createElement(Form, { hidden: !this.state.formShown, ref: function ref(f) {
             return _this2.rForm = f;
-          } }),
+          }, parent: parent }),
         React.createElement("hr", null),
         content
       );
@@ -224,7 +226,7 @@ var Form = function (_React$Component) {
           _this2.clear();
           SeenCount.setLocalCounter(Nullchan.currentBoard.key, true);
 
-          if (_this2.props.isReply) {
+          if (!!_this2.state.parent) {
             if (!!View.postWithReplyForm) {
               View.postWithReplyForm.setState({ showForm: false });
               View.postWithReplyForm = null;
@@ -887,7 +889,6 @@ var Thread = function (_React$Component2) {
   _createClass(Thread, [{
     key: "render",
     value: function render() {
-      console.log(URL_REGEXP);
       var skip = "";
       var rest = 1;
       if (this.state.full == false) {
@@ -1098,9 +1099,7 @@ var Database = function () {
 
       return new Promise(function (resolve) {
         var query = "\n        SELECT message.*, keyvalue.value AS cert_user_id FROM message\n        LEFT JOIN json AS data_json USING (json_id)\n        LEFT JOIN json AS content_json ON (\n          data_json.directory = content_json.directory AND content_json.file_name = 'content.json'\n        )\n        LEFT JOIN keyvalue ON (keyvalue.key = 'cert_user_id' AND keyvalue.json_id = content_json.json_id)\n        WHERE message.board = '" + boardKey + "' AND\n        (message.hashsum = '" + threadHash + "' OR message.parent = '" + threadHash + "')\n        ORDER BY message.created_at ASC\n      ";
-        console.log(query);
         _this3.execute(query).then(function (response) {
-          console.log(response);
           resolve(response);
         });
       });
@@ -1814,7 +1813,7 @@ window.Threads = new Threads();
 var URL_REGEXP = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((\:\d+)?(?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_\#\/\?\*\:]*))?)/mg;
 "use strict";
 
-var VERSION = "0.2.0";
+var VERSION = "0.2.1";
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1922,7 +1921,6 @@ var View = function () {
       }
 
       promise.then(function (threads) {
-        console.log(threads);
         _this4.rBoardPage = ReactDOM.render(React.createElement(BoardPage, { formShown: false, threads: threads }), _this4.container);
         _this4.hidePreloader();
         if (Nullchan.currentPage == "list") {
