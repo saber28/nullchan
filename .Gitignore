@@ -4,3 +4,4 @@ node_modules/*
 js/lib.js
 js/engine.js
 content.json
+update_files.rb

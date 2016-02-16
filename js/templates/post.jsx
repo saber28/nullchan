@@ -1,26 +1,26 @@
 class Post extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = props
   }
 
-  shortHashsum () {
+  shortHashsum() {
     return this.state.data.hashsum.substring(22, 32)
   }
 
-  userName () {
+  userName() {
     return Nullchan.shortUserName(this.state.data.cert_user_id)
   }
 
-  formattedTime () {
+  formattedTime() {
     return Helpers.timeSince(this.state.data.created_at)
   }
 
-  renderMarkup () {
+  renderMarkup() {
     return { __html: Markup.render(this.state.data.body) }
   }
 
-  bodyClick (event) {
+  bodyClick(event) {
     if (event.target.className == "reflink") {
       var hash = event.target.innerHTML.substring(8)
       var post = Threads.shortMap[hash]
@@ -35,7 +35,7 @@ class Post extends React.Component {
     }
   }
 
-  callForm () {
+  callForm() {
     if (View.formBlurred) {
       return
     }
@@ -49,11 +49,14 @@ class Post extends React.Component {
     })    
   }
 
-  render () {
+  render() {
     var klass   = "post"
     var button  = ""
     var picture = ""
     var form    = ""
+
+    var userNameClass = ""
+    var infoClassName = "info"
 
     if (!!this.state.data.parent) {
       klass += " reply"
@@ -68,9 +71,10 @@ class Post extends React.Component {
     }
 
     if (!!this.state.data.file_thumb) {
-      picture = <a href={this.state.data.file_full} target="_blank">
-        <img className="attachment" src={this.state.data.file_thumb} />
-      </a>
+      picture = <AttachmentOld urlFull={this.state.data.file_full} urlThumb={this.state.data.file_thumb} />
+    } else if (!!this.state.data.attachment) {
+      infoClassName += " with-file"
+      picture = <Attachment data={this.state.data} />
     }
 
     if (this.state.showForm == true) {
@@ -78,17 +82,21 @@ class Post extends React.Component {
         isReply={true} parent={this.state.data.parent || this.state.data.hashsum} />
     }
 
-    return (
+    if (this.state.data.anonymous) {
+      userNameClass = "anonymous"
+    }
+
+    return(
       <div className="post-wrapper">
         <div className={klass}
           data-hashsum={this.state.data.hashsum} id={`post-${this.state.data.hashsum}`}>
-          <div className="info">
+          <div className={infoClassName}>
             <div className="time-and-id">
-              <span>
+              <strong className={userNameClass}>
                 {!!this.state.data.anonymous ? "Anonymous" : `${this.userName()}`}
-                &nbsp;wrote&nbsp;
-                {this.formattedTime()},
-              </span>
+              </strong>
+              &nbsp;wrote&nbsp;
+              {this.formattedTime()},
               &nbsp;
               <em className="post-id" onClick={this.callForm.bind(this)}>#{this.shortHashsum()}</em>
             </div>
@@ -99,51 +107,6 @@ class Post extends React.Component {
             dangerouslySetInnerHTML={this.renderMarkup()}></blockquote>
         </div>
         {form}
-      </div>
-    )
-  }
-}
-
-class Thread extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = props
-  }
-
-  render() {
-    var skip = ""
-    var rest = 1
-    if (this.state.full == false) {
-      var count = this.state.posts.length -6
-      if (count > 0) {
-        skip = <SkipGap count={count} parent={this.state.posts[0].hashsum} />
-        rest = this.state.posts.length - 5
-      }
-    }
-
-    return (
-      <div id={`thread-${this.state.posts[0].hashsum}`} className="thread">
-        <Post data={this.state.posts[0]} />
-        {skip}
-        {this.state.posts.slice(rest, this.state.posts.length).map((post) => {
-          return <Post data={post} key={post.hashsum} />
-        })}
-      </div>
-    )
-  }
-}
-
-class SkipGap extends React.Component {
-  handleClick () {
-    View.rBoardPage.threadMap[this.props.parent].setState({full: true})
-  }
-
-  render() {
-    return (
-      <div className="skip-gap" onClick={this.handleClick.bind(this)}>
-        {this.props.count} post(s) omitted. ↕ <span className="expand-button">
-          expand
-        </span>
       </div>
     )
   }

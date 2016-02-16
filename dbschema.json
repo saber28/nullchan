@@ -1,7 +1,7 @@
 {
   "db_name": "0chan",
   "db_file": "data/0chan.db",
-  "version": 3,
+  "version": 4,
   "maps": {
     "users/.+/data.json": {
       "to_table": [ "message" ]
@@ -22,7 +22,15 @@
         ["parent", "STRING"],
         ["file_thumb", "STRING"],
         ["file_full", "STRING"],
-        ["json_id", "INTEGER REFERENCES json (json_id)"]
+        ["json_id", "INTEGER REFERENCES json (json_id)"],
+        ["attachment", "STRING"],
+        ["attachment_size", "INTEGER"],
+        ["attachment_full_height", "INTEGER"],
+        ["attachment_full_width", "INTEGER"],
+        ["attachment_full_path", "STRING"],
+        ["attachment_thumb_height", "INTEGER"],
+        ["attachment_thumb_width", "INTEGER"],
+        ["attachment_thumb_path", "STRING"]
       ],
       "indexes": [
         "CREATE UNIQUE INDEX message_key ON message(json_id, created_at)",
@@ -30,7 +38,7 @@
         "CREATE INDEX message_parent ON message(parent)",
         "CREATE INDEX message_board ON message(board)"
       ],
-      "schema_changed": 1455053650
+      "schema_changed": 1455659110
     }
   }
 }

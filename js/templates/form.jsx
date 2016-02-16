@@ -1,31 +1,31 @@
 class Form extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = props
   }
 
-  called (selectedText = null) {
+  called(selectedText = null) {
     this._textarea.focus()
     if (!!selectedText) {
       this._textarea.value = this._textarea.value + selectedText
     }
   }
 
-  showBlur () {
+  showBlur() {
     View.formBlurred = true
     this._node.className = "form loading"
   }
 
-  hideBlur () {
+  hideBlur() {
     View.formBlurred = false
     this._node.className = "form"
   }
 
-  clear () {
+  clear() {
     this._node.reset()
   }
 
-  handleSubmit (event) {
+  handleSubmit(event) {
     event.preventDefault()
     var data = this.collectFormData()
     if (data == false) {
@@ -52,10 +52,14 @@ class Form extends React.Component {
           Nullchan.determineRoute()
         }
       })
+    }).catch((err) => {
+      alert(err)
+      this.hideBlur()
+      return
     })
   }
 
-  collectFormData () {
+  collectFormData() {
     var result = {
       body:       this._node.getElementsByClassName("text")[0].value.trim(),
       file:       this._node.getElementsByClassName("file")[0].files[0],
@@ -75,7 +79,7 @@ class Form extends React.Component {
     return result
   }
 
-  render () {
+  render() {
     var display = "block"
     var id      = "top-form"
 

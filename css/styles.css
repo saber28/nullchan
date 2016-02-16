@@ -1,8 +1,3 @@
-
-
-/* ---- data/1FiSxj2yDPeGuuf6iBwRAXvEMQJATAZNt6/css/lib/forms.css ---- */
-
-
 #top-form, #reply-form {
   display: table;
   width: 416px;
@@ -254,7 +249,11 @@ a:hover {
 }
 
 .post .info {
-  font-size: 11px;
+  font-size: 12px;
+}
+
+.post .info.with-file {
+  line-height: 0.6;
 }
 
 .post .time-and-id {
@@ -267,22 +266,38 @@ a:hover {
 .post .post-id {
   text-decoration: none;
   color: inherit;
-}
-
-.post .time-and-id em {
   font-style: normal;
   font-weight: bold;
 }
 
-.post .time-and-id span b {
+.post .time-and-id strong {
   color: #aaa !important;
 }
 
-.post img.attachment {
-  float: left;
+.post .time-and-id strong.anonymous {
+  color: inherit !important;
+  font-weight: normal;
+}
+
+.attachment {
   margin-right: 10px;
   margin-bottom: 5px;
-  margin-left: 1px;
+}
+
+.attachment img {
+  float: left;
+  margin-right: 13px;
+}
+
+.attachment-info {
+  font-size: 10px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.attachment-info a {
+  color: inherit;
+  color: #999;
 }
 
 .post .text {
