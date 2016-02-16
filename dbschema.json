@@ -1,7 +1,7 @@
 {
   "db_name": "0chan",
   "db_file": "data/0chan.db",
-  "version": 4,
+  "version": 2,
   "maps": {
     "users/.+/data.json": {
       "to_table": [ "message" ]
@@ -38,7 +38,7 @@
         "CREATE INDEX message_parent ON message(parent)",
         "CREATE INDEX message_board ON message(board)"
       ],
-      "schema_changed": 1455659110
+      "schema_changed": 1455659111
     }
   }
 }
