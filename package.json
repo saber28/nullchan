@@ -1,9 +1,9 @@
 {
   "name": "Nullchan",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "scripts": {
-    "buildLib": "babel js/lib -o js/lib.js",
-    "build":    "babel js/templates js/engine -o js/engine.js"
+    "buildLib": "babel js/libs -o js/lib.js && uglifyjs js/lib.js --screw-ie8 --mangle --compress -o js/lib.js --preamble \"/*\n * Nullchan P2P imageboard engine\n *\n * Licensed under the GNU GPL v3 license: \n * http://www.gnu.org/licenses/gpl-3.0.en.html \n *\n * Source code is minified to improve load time, full source on GitHub: \n * https://github.com/Nullchan/nullchan\n */\"",
+    "build": "babel js/templates js/engine -o js/engine.js && uglifyjs js/engine.js --screw-ie8 --mangle --compress -o js/engine.js --preamble \"/*\n * Nullchan P2P imageboard engine\n *\n * Licensed under the GNU GPL v3 license: \n * http://www.gnu.org/licenses/gpl-3.0.en.html \n *\n * Source code is minified to improve load time, full source on GitHub: \n * https://github.com/Nullchan/nullchan\n */\""
   },
   "devDependencies": {
     "babel-cli": "^6.0.0",

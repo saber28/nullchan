@@ -60,18 +60,16 @@ class MainPage extends React.Component {
               </td>
               <td>
                 <blockquote>
-                  <strong>0chan</strong> is an imageboard engine<br/>currently in development.
+                  <strong>0chan</strong> is a p2p imageboard engine<br/>currently in development.
                   <br/><br/>
-                  <em style={{color: "orange !important"}}>To 8ch newfriends</em>: welcome! Sorry about the 
-                  mess, this site is still very fresh and raw. I didn't advertise it on 8ch, some random guy did. 
-                  This is basically just a tech demo which misses a lot of features that you're accustomed to, 
+                  This site is basically just a tech demo which misses a lot of crucial features, 
                   but it will get better with time.
                   <br/>
                   <br/>
                   <hr/>
                   <span>
                     <em>Current development status:</em>
-                    Investigating image processing errors (15.02.2016)
+                    Investigating image processing errors, writing pagination (16.02.2016)
                   </span>
                   <br/>
                   &nbsp;
