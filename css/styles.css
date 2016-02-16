@@ -347,11 +347,10 @@ a:hover {
 
 #preloader.shown {
   display: block;
-  -webkit-animation: fadein 5s; /* Safari, Chrome and Opera > 12.1 */
-   -moz-animation:   fadein 5s; /* Firefox < 16 */
-    -ms-animation:   fadein 5s; /* Internet Explorer */
-     -o-animation:   fadein 5s; /* Opera < 12.1 */
-        -webkit-animation:   fadein 5s; -moz-animation:   fadein 5s; -o-animation:   fadein 5s; -ms-animation:   fadein 5s; animation:   fadein 5s ;
+  -webkit-animation:        fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+   -moz-animation:          fadein 2s; /* Firefox < 16 */
+    -ms-animation:          fadein 2s; /* Internet Explorer */
+     -o-animation:          fadein 2s; /* Opera < 12.1 */
 }
 
 #preloader div {
@@ -374,17 +373,6 @@ a:hover {
   margin-top: 10px;
   margin-bottom: 20px;
 }
-
-/*input[type="text"], textarea, #thread-form .submit {
-  border: 1px solid;
-  padding: 5px !important;
-  -webkit-border-radius: 0px !important; -moz-border-radius: 0px !important; -o-border-radius: 0px !important; -ms-border-radius: 0px !important; border-radius: 0px !important ;
-  font-family: Verdana, sans-serif;
-  font-size: 12px;
-  background: none;
-  border-color: #555;
-  color: #cccccc;
-}*/
 
 #form-title {
   height: 20px;

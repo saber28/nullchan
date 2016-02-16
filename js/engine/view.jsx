@@ -12,7 +12,7 @@ class View {
   showPreloader () {
     this.preloader.className     = ""
     this.container.style.display = "none"
-    setTimeout(() => { this.preloader.className = "shown" }, 1000)
+    setTimeout(() => { this.preloader.className = "shown" }, 600)
   }
 
   hidePreloader () {
