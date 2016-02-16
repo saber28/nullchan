@@ -27,8 +27,13 @@ class Form extends React.Component {
 
   handleSubmit (event) {
     event.preventDefault()
-    this.showBlur()
     var data = this.collectFormData()
+    if (data == false) {
+      this.hideBlur()
+      return
+    }
+    this.showBlur()
+
     Images.process(data).then((modifiedData) => {
       Files.uploadPost(modifiedData).then((newPost) => {
         this.hideBlur()
@@ -62,6 +67,11 @@ class Form extends React.Component {
     }
     var name = this._node.getElementsByClassName("name")[0]
     result.anonymous = (name.options[name.selectedIndex].value == "anonymous")
+
+    if (!!!result.file && result.body == "") {
+      alert("Your post is empty")
+      return false
+    }
     return result
   }
 
