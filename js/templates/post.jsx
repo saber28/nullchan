@@ -70,11 +70,11 @@ class Post extends React.Component {
       }
     }
 
-    if (!!this.state.data.file_thumb) {
-      picture = <AttachmentOld urlFull={this.state.data.file_full} urlThumb={this.state.data.file_thumb} />
-    } else if (!!this.state.data.attachment) {
+    if (!!this.state.data.attachment) {
       infoClassName += " with-file"
       picture = <Attachment data={this.state.data} />
+    } else if (!!this.state.data.file_thumb) {
+      picture = <AttachmentOld urlFull={this.state.data.file_full} urlThumb={this.state.data.file_thumb} />
     }
 
     if (this.state.showForm == true) {

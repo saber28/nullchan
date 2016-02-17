@@ -1,12 +1,22 @@
 class Attachment extends React.Component {
+  shortName() {
+    var name = this.props.data.attachment
+    if (name.length > 25) {
+      var split = name.split(".")
+      name = split.slice(0, split.length-1).join(".")
+      name = name.slice(0, 23) + "..." + "." + split[split.length-1]
+    }
+    return name
+  }
+
   render() {
     return(
       <div className="attachment">
         <div className="attachment-info">
           File: {Helpers.formatSizeUnits(this.props.data.attachment_size)},&nbsp;
-          {this.props.data.attachment_full_width}x{this.props.data.attachment_full_height}&nbsp;&nbsp;
+          {this.props.data.attachment_full_width}x{this.props.data.attachment_full_height},&nbsp;
           <a href={this.props.data.attachment_full_path} 
-            download={this.props.data.attachment} target="_blank">{this.props.data.attachment}</a>
+            download={this.props.data.attachment} target="_blank">{this.shortName()}</a>
         </div>
         <a href={this.props.data.attachment_full_path} target="_blank">
           <img width={this.props.data.attachment_thumb_width} 
