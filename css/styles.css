@@ -280,13 +280,26 @@ a:hover {
 }
 
 .attachment {
+  position: relative;
   margin-right: 10px;
   margin-bottom: 5px;
 }
 
 .attachment img {
+  position: relative;
+  z-index: 2;
   float: left;
   margin-right: 13px;
+  opacity: 0.4;
+}
+
+.image-loading {
+  position: absolute;
+  z-index: 1;
+  top: 13px;
+  left: 0px;
+  font-size: 12px;
+  color: #aaa;
 }
 
 .attachment-info {
@@ -720,4 +733,9 @@ hr.white {
   color: #cf6 !important;
 }
 
-
+.post .text hr {
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  height: 4px;
+}

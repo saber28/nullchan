@@ -53,8 +53,8 @@ class Markup {
 
       // line breaks
       [/\r?\n/mg,  "\n"],
-      [/\n/mg,     "<br/>"],
-      [/(<br\/>){2,}/mg, "<br/><br/>"],
+      [/\n/mg,     "<hr/>"],
+      [/(<hr\/>){2,}/mg, "<hr/><hr/>"],
     ]
   }
 
