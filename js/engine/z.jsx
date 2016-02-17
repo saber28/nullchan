@@ -86,7 +86,7 @@ class Nullchan extends ZeroFrame {
   grepPath () {
     var result = []
     for (let part of window.location.search.substring(1).split("/")) {
-      if (part.includes("wrapper_nonce")) {
+      if (!!part.match("wrapper_nonce")) {
         part = part.split("wrapper_nonce")[0]
       }
       part = part.trim()

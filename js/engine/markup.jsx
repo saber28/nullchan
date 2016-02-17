@@ -61,7 +61,7 @@ class Markup {
   render (content) {
     content = this.escapeHTML(content).trim()
     content = content.replace(URL_REGEXP, (match, text) => {
-      if (match.includes('@') || !match.startsWith("http")) {
+      if (!!match.match('@') || !match.startsWith("http")) {
         return match
       }
       var link = match
