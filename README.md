@@ -2,14 +2,14 @@
 
 P2P Imageboard engine for [ZeroNet](https://github.com/HelloZeroNet/ZeroNet)
 
-## Try it out
+### Try it out
 
 * [http://127.0.0.1:43110/0chan.bit](http://127.0.0.1:43110/0chan.bit) (requires [ZeroNet](https://github.com/HelloZeroNet/ZeroNet) installed and running)
 * http://zero.pags.to:43110/0chan.bit
 * http://bit.no.com:43110/0chan.bit
 
 
-## Set up your own board
+### Set up your own board
 
 1. [RTFM](http://zeronet.readthedocs.org/en/latest/using_zeronet/create_new_site/) and learn how to create new ZeroNet site.
 2. Learn what [NPM](https://www.npmjs.com/) is and how to use it.
@@ -22,6 +22,6 @@ P2P Imageboard engine for [ZeroNet](https://github.com/HelloZeroNet/ZeroNet)
 9. In ZeroNet root directory run command `python zeronet.py siteSign YOUR_SITE_ADDRESS --publish`
 10. Enjoy!
 
-## Screenshots
+### Screenshots
 
 ![Screenshot](http://i.imgur.com/xCsMjjE.png)
