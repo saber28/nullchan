@@ -8,7 +8,7 @@ class BoardLine extends React.Component {
       <tr>
         <td className="unread">{unread}</td>
         <td>
-          <a href={Helpers.fixLink(`?/${this.props.data.key}/`)}>{this.props.data.name}</a>
+          <a target="_parent" href={Helpers.fixLink(`?/${this.props.data.key}/`)}>{this.props.data.name}</a>
         </td>
       </tr>
     )
@@ -69,7 +69,7 @@ class MainPage extends React.Component {
                   <hr/>
                   <span>
                     <em>Current development status:</em>
-                    Investigating image processing errors, writing pagination (16.02.2016)
+                    Had some days off, will deliver a couple of nice features this weekend (06.03.2016)
                   </span>
                   <br/>
                   &nbsp;

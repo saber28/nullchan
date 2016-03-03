@@ -26,7 +26,7 @@ class Markup {
       [/^\s*&gt;\s{0,1}(.+?)$/mg, (match, content) => {
         let br = ""
         if (match[0] == "\n") {
-          br = "<br />"
+          br = "<hr/>"
         }
         return (br + `<em class='quote'>&gt; ${content}</em>`)
       }],

@@ -50,13 +50,13 @@ class Post extends React.Component {
   }
 
   render() {
-    var klass   = "post"
-    var button  = ""
-    var picture = ""
-    var form    = ""
+    let klass   = "post"
+    let button  = ""
+    let picture = ""
+    let form    = ""
 
-    var userNameClass = ""
-    var infoClassName = "info"
+    let userNameClass = ""
+    let infoClassName = "info"
 
     if (!!this.state.data.parent) {
       klass += " reply"
