@@ -1,0 +1,10 @@
+{
+ // make sure to have these in your content.json file
+ "ignore": "(.git|data/users|node_modules|data/0chan.db|update_files.rb|package.json|content.example.json|LICENSE|README.md|js/engine/.*|js/templates|js/libs)", 
+ "includes": {
+  "data/users/content.json": {
+   "signers": [], 
+   "signers_required": 1
+  }
+ }, 
+}

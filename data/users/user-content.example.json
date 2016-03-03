@@ -1,0 +1,23 @@
+{
+ "files": {}, 
+ "ignore": ".*", 
+ "modified": 0, 
+ "optional": ".*\\.(png|jpg|gif)", 
+ "user_contents": {
+  "cert_signers": {
+   "zeroid.bit": [ "1iD5ZQJMNXu43w1qLB8sfdHVKppVMduGz" ]
+  }, 
+  "permission_rules": {
+   ".*": {
+    "files_allowed": "(data.json|test.txt)", 
+    "files_allowed_optional": ".*\\.(png|jpg|gif)", 
+    "max_size": 5000000, 
+    "max_size_optional": 200000000
+   }
+  }, 
+  "permissions": {
+   "banexample@zeroid.bit": false, 
+   "nofish@zeroid.bit": { "max_size": 20000 }
+  }
+ }
+}

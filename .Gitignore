@@ -1,4 +1,5 @@
 /data/users/*
+!data/users/user-content.example.json
 *.db
 node_modules/*
 js/lib.js
