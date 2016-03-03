@@ -16,8 +16,8 @@ class Boards {
 
   reload () {
     return new Promise((resolve) => {
-      Nullchan.cmd("fileGet", "data/boards.json", (data) => {
-        this._list = JSON.parse(data).boards
+      Nullchan.reloadEngineSettings().then(() => {
+        this._list = Nullchan.engineSettings.boards
         SeenCount.getUnread().then((unreads) => {
           for (let i in this.list) {
             this._list[i].unread = unreads[this.list[i].key]
@@ -28,5 +28,4 @@ class Boards {
     })})
   }
 }
-
 window.Boards = new Boards

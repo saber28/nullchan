@@ -12,13 +12,13 @@ class Markup {
     this.expressions = [
       // reflinks 
       [/&gt;&gt;(\w+)/mg, (match, content) => {
-        var post = Threads.shortMap[content]
+        let post = Threads.shortMap[content]
         if (!!!post) {
           return match
         }
 
-        var parent = post.parent || post.hashsum
-        var url    = Helpers.fixLink(`/0chan.bit/?/${post.board}/thread/${parent}/${content}`)
+        let parent = post.parent || post.hashsum
+        let url    = Helpers.fixLink(`/${Nullchan.engineSettings.siteAddress}/?/${post.board}/thread/${parent}/${content}`)
         return `<a class="reflink" href="${url}">&gt;&gt;${content}</a>`
       }],
 
@@ -64,7 +64,7 @@ class Markup {
       if (!!match.match('@') || !match.startsWith("http")) {
         return match
       }
-      var link = match
+      let link = match
       if (link.length > 50) {
         link = link.substring(0, 50) + "..."
       }

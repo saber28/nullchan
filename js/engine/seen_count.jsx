@@ -26,7 +26,7 @@ class SeenCount {
       this.getLocalCounter(),
     ]).then((data) => {
       let [actual, local] = data
-      var storage = {}
+      let storage = {}
       local[boardKey] = actual[boardKey]
 
       if (forcePlusOne) {
@@ -45,7 +45,7 @@ class SeenCount {
         if (!!!response) {
           response = {}
         }
-        var result = {}
+        let result = {}
 
         for (let board of Boards.list) { 
           result[board.key] = response[`msg_${board.key}`] || 0
@@ -62,7 +62,7 @@ class SeenCount {
         this.getLocalCounter(),
       ]).then((data) => {
         let [actual, local] = data
-        var result = {}
+        let result = {}
         for (let board of Boards.list) { 
           if (local[board.key] > 0) {
             result[board.key] = actual[board.key] - local[board.key]

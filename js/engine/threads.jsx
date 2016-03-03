@@ -32,8 +32,8 @@ class Threads {
   }
 
   buildThreads (messages) {
-    var posts      = {}
-    var threads    = []
+    let posts      = {}
+    let threads    = []
 
     for (let post of messages) {
       this._shortMap[post.hashsum.substring(22, 32)] = post
@@ -70,12 +70,12 @@ class Threads {
 
   appendPost (newPost) {
     this._shortMap[newPost.hashsum.substring(22, 32)] = newPost
-    var parentHash = newPost.parent || newPost.hashsum
+    let parentHash = newPost.parent || newPost.hashsum
     if (!!this.cachedPosts[parentHash]) {
       this._cachedPosts[parentHash].replies.push(newPost)
       if (!!View.rBoardPage.threadMap[parentHash]) {
-        var thread = this._cachedPosts[parentHash]
-        var posts  = [thread.opening].concat(thread.replies.sort(this.sortPosts))
+        let thread = this._cachedPosts[parentHash]
+        let posts  = [thread.opening].concat(thread.replies.sort(this.sortPosts))
         
         View.rBoardPage.threadMap[parentHash].setState({posts: posts})
       }

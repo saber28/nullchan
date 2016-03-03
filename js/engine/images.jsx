@@ -11,21 +11,21 @@ class Images {
         return
       }
 
-      var image  = document.createElement("img")
-      var reader = new FileReader()
+      let image  = document.createElement("img")
+      let reader = new FileReader()
 
       reader.onload = (event) => { image.src = event.target.result }
       image.onload  = () => {
-        var canvas    = document.createElement("canvas")
-        var ctx       = canvas.getContext("2d")
+        let canvas    = document.createElement("canvas")
+        let ctx       = canvas.getContext("2d")
         canvas.width  = image.width
         canvas.height = image.height
         ctx.drawImage(image, 0, 0, image.width, image.height)
-        var imageFull = canvas.toDataURL(formData.file.type, 1).split(',')[1]
-        var maxWidth  = 200
-        var maxHeight = 200
-        var width     = image.width
-        var height    = image.height
+        let imageFull = canvas.toDataURL(formData.file.type, 1).split(',')[1]
+        let maxWidth  = 200
+        let maxHeight = 200
+        let width     = image.width
+        let height    = image.height
 
         formData.attachment             = formData.file.name.trim()
         formData.attachment_size        = formData.file.size
@@ -53,8 +53,8 @@ class Images {
         ctx = canvas.getContext("2d")
         ctx.drawImage(image, 0, 0, width, height)
 
-        var imageThumb  = canvas.toDataURL("image/jpeg", 1).split(',')[1]
-        var hash        = md5(imageFull)
+        let imageThumb  = canvas.toDataURL("image/jpeg", 1).split(',')[1]
+        let hash        = md5(imageFull)
 
         if (formData.attachment == "") {
           formData.attachment = `${hash}.jpg`

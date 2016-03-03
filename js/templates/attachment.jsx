@@ -15,7 +15,6 @@ class Attachment extends React.Component {
   }
 
   onImageLoad() {
-    console.log("loaded")
     this.setState({loaded: true})
   }
 

@@ -1,0 +1,12 @@
+{
+  "siteName": "My new imageboard", 
+  "siteAddress": "0chan.bit", 
+
+  "boards": [
+    {
+      "priority": 1, 
+      "key": "b", 
+      "name": "Random stuff" 
+    }
+  ]
+}

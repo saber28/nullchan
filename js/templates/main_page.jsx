@@ -1,6 +1,6 @@
 class BoardLine extends React.Component {
   render () {
-    var unread = ""
+    let unread = ""
     if (this.props.data.unread > 0) {
       unread = `+${this.props.data.unread}`
     }
@@ -22,23 +22,14 @@ class MainPage extends React.Component {
   }
 
   render () {
+    let logo = <Logo />
+
     return(
       <div id="glagne" key={"mainpage"}>
-        <pre id="logo">
-          <code>{`
-  /$$$$$$            /$$                          
- /$$$_  $$          | $$                          
-| $$$$\\ $$  /$$$$$$$| $$$$$$$   /$$$$$$  /$$$$$$$ 
-| $$ $$ $$ /$$_____/| $$__  $$ |____  $$| $$__  $$
-| $$\\ $$$$| $$      | $$  \\ $$  /$$$$$$$| $$  \\ $$
-| $$ \\ $$$| $$      | $$  | $$ /$$__  $$| $$  | $$
-|  $$$$$$/|  $$$$$$$| $$  | $$|  $$$$$$$| $$  | $$
- \\______/  \\_______/|__/  |__/ \\_______/|__/  |__/
-          `}</code>
-        </pre>
+        {logo}
         <hr/>
         <blockquote className="monospace">
-          fork me on <a href="https://github.com/Nullchan/nullchan" target="_parent">GitHub</a> (v {VERSION})
+          powered by <a href="https://github.com/Nullchan/nullchan" target="_parent">Nullchan engine</a> (v {VERSION})
         </blockquote>
 
         <hr/>
@@ -60,15 +51,18 @@ class MainPage extends React.Component {
               </td>
               <td>
                 <blockquote>
-                  <strong>0chan</strong> is a p2p imageboard engine<br/>currently in development.
+                  <strong>{Nullchan.engineSettings.siteName}</strong> is a decentralised P2P imageboard
+                  powered by <a className="muted" href="https://github.com/Nullchan/nullchan" target="_parent">Nullchan</a> engine
+                  running on <a className="muted" href="https://github.com/HelloZeroNet/ZeroNet" target="_parent">ZeroNet</a>.
                   <br/><br/>
-                  This site is basically just a tech demo which misses a lot of crucial features, 
+                  The engine is still very early in development and thus this site is basically 
+                  just a tech demo which misses a lot of crucial features, 
                   but it will get better with time.
                   <br/>
                   <br/>
                   <hr/>
                   <span>
-                    <em>Current development status:</em>
+                    <em>Engine development status:</em>
                     Had some days off, will deliver a couple of nice features this weekend (06.03.2016)
                   </span>
                   <br/>
@@ -81,7 +75,7 @@ class MainPage extends React.Component {
         </div>
         <hr/>
         <blockquote className="monospace">
-          message me on <a href={Helpers.fixLink("/Mail.ZeroNetwork.bit/?to=sthetz")} target="_parent">ZeroMail</a>
+          message the devs on <a href={Helpers.fixLink("/Mail.ZeroNetwork.bit/?to=sthetz")} target="_parent">ZeroMail</a>
         </blockquote>
       </div>
     )

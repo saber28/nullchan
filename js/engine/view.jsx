@@ -54,7 +54,7 @@ class View {
   }
 
   renderBoard (threadHash = null) {
-    var promise
+    let promise
     if (threadHash == null) {
       promise = Threads.loadAll()
     } else {

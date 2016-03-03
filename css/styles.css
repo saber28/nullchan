@@ -15,6 +15,18 @@
   -ms-user-select: none;
 }
 
+#glagne a.muted {
+  color: #999;
+  font-size: 11px;
+}
+
+#logo .third-party {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 40px;
+  margin-top: 0px;
+  margin-bottom: 13px;
+  color: #eee;
+}
 
 .form.loading  table {
   -webkit-filter: blur(1px)

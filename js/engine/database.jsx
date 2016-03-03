@@ -7,7 +7,7 @@ class Database {
 
   static getLastPost () {
     return new Promise((resolve) => {
-      var query = `
+      let query = `
         SELECT message.* FROM message
         ORDER BY message.created_at DESC LIMIT 1
       `
@@ -17,9 +17,9 @@ class Database {
 
   static getMessageCountByBoard () {
     return new Promise((resolve) => {
-      var query = "SELECT message.board, COUNT(*) FROM message GROUP BY board"
+      let query = "SELECT message.board, COUNT(*) FROM message GROUP BY board"
       this.execute(query).then((response) => {
-        var result = {}
+        let result = {}
         for (let count of response) {
           result[count.board] = count["COUNT(*)"]
         }
@@ -30,7 +30,7 @@ class Database {
 
   static loadSingleThread (boardKey, threadHash) {
     return new Promise((resolve) => {
-      var query = `
+      let query = `
         SELECT message.*, keyvalue.value AS cert_user_id FROM message
         LEFT JOIN json AS data_json USING (json_id)
         LEFT JOIN json AS content_json ON (
@@ -49,7 +49,7 @@ class Database {
 
   static loadMessagesOnBoard (boardKey) {
     return new Promise((resolve) => {
-      var query = `
+      let query = `
         SELECT message.*, keyvalue.value AS cert_user_id FROM message
         LEFT JOIN json AS data_json USING (json_id)
         LEFT JOIN json AS content_json ON (

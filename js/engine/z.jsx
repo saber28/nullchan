@@ -1,4 +1,5 @@
 class Nullchan extends ZeroFrame {
+  get engineSettings ()  { return this._engineSettings}
   get currentPath ()     { return this._currentPath   }
   get currentPage ()     { return this._currentPage   }
   get currentBoard()     { return this._currentBoard  }
@@ -22,14 +23,30 @@ class Nullchan extends ZeroFrame {
     this.cmd("siteInfo", {}, (newInfo) => { this.updateSiteInfo(newInfo) })
   }
 
+  reloadEngineSettings() {
+    return new Promise((resolve, reject) => {
+      this.cmd("fileGet", { inner_path: "data/settings.json" }, (settingsJSON) => {
+        try {
+          this._engineSettings = JSON.parse(settingsJSON)
+          return resolve()
+        } catch (e) {
+          alert("Something's wrong with your settings.json file!")
+          return reject()
+        }
+      })
+    })
+  }
+
   onOpenWebsocket () {
-    this.cmd("siteInfo", {}, (newInfo) => {
-      this.updateSiteInfo(newInfo)
-      if (this.currentPage == null) {
-        View.renderHeader()
-        this.determineRoute()
-      }
-      this.reloadSiteInfo()
+    this.reloadEngineSettings().then(() => {
+      this.cmd("siteInfo", {}, (newInfo) => {
+        this.updateSiteInfo(newInfo)
+        if (this.currentPage == null) {
+          View.renderHeader()
+          this.determineRoute()
+        }
+        this.reloadSiteInfo()
+      })
     })
   }
 
@@ -84,7 +101,7 @@ class Nullchan extends ZeroFrame {
   }
 
   grepPath () {
-    var result = []
+    let result = []
     for (let part of window.location.search.substring(1).split("/")) {
       if (!!part.match("wrapper_nonce")) {
         part = part.split("wrapper_nonce")[0]
@@ -101,5 +118,4 @@ class Nullchan extends ZeroFrame {
     this._currentPath = result
   }
 }
-
 window.Nullchan = new Nullchan()

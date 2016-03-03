@@ -27,8 +27,8 @@ class BoardLink extends React.Component {
         <a href={Helpers.fixLink(`?/${this.props.boardKey}/`)} 
           className="board-name" target="_parent">{this.props.boardName}</a>
         &nbsp;on&nbsp;
-        <a href={Helpers.fixLink("/0chan.bit")} target="_parent" 
-          id="nullchan-link" className="to-main">0chan.bit</a>
+        <a href={Helpers.fixLink(`/${Nullchan.engineSettings.siteAddress}`)} target="_parent" 
+          id="nullchan-link" className="to-main">{Nullchan.engineSettings.siteName}</a>
       </span>
     )
   } 
