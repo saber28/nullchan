@@ -27,7 +27,7 @@ Copy file `data/users/user-content.example.json` to `data/users/content.json`, t
 
 If you want to change what boards your site will have, edit file `data/boards.json`. Don't forget to sign and publish your site after that.
 
-If you want to change main page's logo by editing `js/templates/main_page.jsx` file. After editing any JS files you have to run command `npm run build` and sign+publish your site. 
+If you want to change main page's logo, edit `js/templates/main_page.jsx` file. Don't forget that after editing any JS files you have to run command `npm run build` and sign+publish your site. 
 
 ### Screenshots
 
