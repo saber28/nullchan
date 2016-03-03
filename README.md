@@ -22,8 +22,8 @@ In root directory open file `content.example.json` and merge its contents with y
 
 Copy file `data/users/user-content.example.json` to `data/users/content.json`, then go to ZeroNet root directory and run these commands:
 
-    python zeronet.py siteSign YOUR_SITE_ADDRESS --inner_path data/users/content.json --publish
-    python zeronet.py siteSign YOUR_SITE_ADDRESS --publish
+    $ python zeronet.py siteSign YOUR_SITE_ADDRESS --inner_path data/users/content.json --publish
+    $ python zeronet.py siteSign YOUR_SITE_ADDRESS --publish
 
 If you want to change what boards your site will have, edit file `data/boards.json`. Don't forget to sign and publish your site after that.
 
