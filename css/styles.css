@@ -751,3 +751,7 @@ hr.white {
   border: none;
   height: 4px;
 }
+
+.post-wrapper {
+  overflow: hidden;
+}

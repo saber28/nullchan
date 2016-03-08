@@ -9,9 +9,18 @@ class Database {
     return new Promise((resolve) => {
       let query = `
         SELECT message.* FROM message
-        ORDER BY message.created_at DESC LIMIT 1
+        ORDER BY message.created_at DESC LIMIT 10
       `
-      this.execute(query).then((response) => { resolve(response[0]) })
+      this.execute(query).then((response) => { 
+        let now = Helpers.unixTimestamp()
+        for (let post of response) {
+          if (post.created_at > now) {
+            continue
+          }
+          resolve(post)
+          break
+        }
+      })
     })
   }
 
