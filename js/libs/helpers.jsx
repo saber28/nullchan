@@ -57,3 +57,5 @@ class Helpers {
     return "/" + href
   }
 }
+
+export default Helpers

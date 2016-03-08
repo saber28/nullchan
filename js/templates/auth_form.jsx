@@ -1,4 +1,6 @@
-class AuthForm extends React.Component {
+import React from "react"
+
+export default class AuthForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = props
@@ -9,7 +11,7 @@ class AuthForm extends React.Component {
   }
 
   handleChange (event) {
-    var newSign = event.currentTarget.value
+    let newSign = event.currentTarget.value
     if (newSign == "other") {
       this.showAuthDialog()
       event.preventDefault()
@@ -19,7 +21,7 @@ class AuthForm extends React.Component {
   }
 
   render () {
-    var content
+    let content
     if (!!!this.state.userName) {
       content = <div className="auth-please" onClick={this.showAuthDialog}>
         <u>Authorize</u> to post messages.<br/>

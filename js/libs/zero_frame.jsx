@@ -88,3 +88,5 @@ class ZeroFrame {
     this.log('Websocket close')
   }
 }
+
+export default ZeroFrame

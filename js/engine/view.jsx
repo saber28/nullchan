@@ -1,3 +1,10 @@
+import React      from "react"
+import ReactDOM   from "react-dom"
+import Header     from "../templates/header.jsx"
+import MainPage   from "../templates/main_page.jsx"
+import BoardPage  from "../templates/board_page.jsx" 
+import NotFound   from "../templates/not_found.jsx"
+
 class View {
   get container () { return this._container }
   get header    () { return this._header    }
@@ -96,5 +103,4 @@ class View {
     }
   }
 }
-
-window.View = new View
+window.View = new View()

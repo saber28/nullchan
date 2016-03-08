@@ -1,3 +1,6 @@
+import Database from "./database.jsx"
+import Helpers  from "../libs/helpers.jsx"
+
 class Threads {
   get cachedPosts () { return this._cachedPosts }
   get shortMap    () { return this._shortMap    }
@@ -96,5 +99,4 @@ class Threads {
     return 1
   }
 }
-
-window.Threads = new Threads
+window.Threads = new Threads()

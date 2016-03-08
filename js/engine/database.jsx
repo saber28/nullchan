@@ -1,4 +1,6 @@
-class Database {
+import Helpers from "../libs/helpers.jsx"
+
+export default class Database {
   static execute (query) {
     return new Promise((resolve) => {
       Nullchan.cmd("dbQuery", query.trim(), (response) => { resolve(response) })

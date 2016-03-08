@@ -1,4 +1,9 @@
-class BoardPage extends React.Component {
+import React      from "react"
+import Thread     from "../templates/thread.jsx"
+import Form       from "../templates/form.jsx"
+import FormButton from "../templates/form_button.jsx"
+
+export default class BoardPage extends React.Component {
   constructor (props) {
     super(props)
     this.threadMap = {}

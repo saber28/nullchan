@@ -1,3 +1,5 @@
+import Database from "./database.jsx"
+
 class SeenCount {
   get actualCounter () { return this._actualCounter }
 
@@ -75,5 +77,4 @@ class SeenCount {
     })
   }
 }
-
-window.SeenCount = new SeenCount
+window.SeenCount = new SeenCount()

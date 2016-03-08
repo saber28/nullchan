@@ -1,12 +1,15 @@
+import ZeroFrame from "../libs/zero_frame.jsx"
+import Helpers   from "../libs/helpers.jsx"
+
 class Nullchan extends ZeroFrame {
-  get engineSettings ()  { return this._engineSettings}
-  get currentPath ()     { return this._currentPath   }
-  get currentPage ()     { return this._currentPage   }
-  get currentBoard()     { return this._currentBoard  }
-  get siteInfo    ()     { return this._siteInfo      }
-  set currentPage (page) { this._currentPage = page   }
-  set siteInfo    (info) { this._siteInfo = info      }
-  set currentBoard(board){ this._currentBoard = board }
+  get engineSettings ()      { return this._engineSettings}
+  get currentPath    ()      { return this._currentPath   }
+  get currentPage    ()      { return this._currentPage   }
+  get currentBoard   ()      { return this._currentBoard  }
+  get siteInfo       ()      { return this._siteInfo      }
+  set currentPage    (page)  { this._currentPage = page   }
+  set siteInfo       (info)  { this._siteInfo = info      }
+  set currentBoard   (board) { this._currentBoard = board }
   
   init () {
     this.grepPath()
@@ -102,7 +105,7 @@ class Nullchan extends ZeroFrame {
 
   grepPath () {
     let result = []
-    for (let part of window.location.search.substring(1).split("/")) {
+    for (let part of location.search.substring(1).split("/")) {
       if (!!part.match("wrapper_nonce")) {
         part = part.split("wrapper_nonce")[0]
       }
@@ -119,3 +122,4 @@ class Nullchan extends ZeroFrame {
   }
 }
 window.Nullchan = new Nullchan()
+

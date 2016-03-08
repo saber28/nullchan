@@ -1,4 +1,7 @@
-class Form extends React.Component {
+import React    from "react"
+import AuthForm from "./auth_form.jsx"
+
+export default class Form extends React.Component {
   constructor(props) {
     super(props)
     this.state = props

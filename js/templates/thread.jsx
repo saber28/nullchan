@@ -1,4 +1,8 @@
-class Thread extends React.Component {
+import React    from "react"
+import SkipGap  from "./skip_gap.jsx"
+import Post     from "./post.jsx"
+
+export default class Thread extends React.Component {
   constructor (props) {
     super(props)
     this.state = props

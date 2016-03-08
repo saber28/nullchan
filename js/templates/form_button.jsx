@@ -1,4 +1,6 @@
-class FormButton extends React.Component {
+import React from "react"
+
+export default class FormButton extends React.Component {
   handleClick (event) {
     View.rBoardPage.setState({formShown: true}, () => {
       View.rBoardPage.rForm.called()  

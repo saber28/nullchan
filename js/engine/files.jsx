@@ -115,5 +115,4 @@ class Files {
     })
   }
 }
-
-window.Files = new Files
+window.Files = new Files()

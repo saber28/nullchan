@@ -1,15 +1,15 @@
 {
   "name": "Nullchan",
   "version": "0.1.0",
-  "scripts": {
-    "buildLib": "babel js/libs -o js/lib.js && uglifyjs js/lib.js --screw-ie8 --mangle --compress -o js/lib.js --preamble \"/*\n * Nullchan P2P imageboard engine\n *\n * Licensed under the GNU GPL v3 license: \n * http://www.gnu.org/licenses/gpl-3.0.en.html \n *\n * Source code is minified to improve load time, full source on GitHub: \n * https://github.com/Nullchan/nullchan\n */\"",
-    "build": "babel js/templates js/engine -o js/engine.js && uglifyjs js/engine.js --screw-ie8 --mangle --compress -o js/engine.js --preamble \"/*\n * Nullchan P2P imageboard engine\n *\n * Licensed under the GNU GPL v3 license: \n * http://www.gnu.org/licenses/gpl-3.0.en.html \n *\n * Source code is minified to improve load time, full source on GitHub: \n * https://github.com/Nullchan/nullchan\n */\"",
-    "buildDev": "babel js/templates js/engine -o js/engine.js"
-  },
   "devDependencies": {
     "babel-cli": "^6.0.0",
+    "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
-    "uglifyjs": "^2.4.10"
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "uglify-loader": "^1.3.0",
+    "uglifyjs": "^2.4.10",
+    "webpack": "^1.12.14"
   }
 }

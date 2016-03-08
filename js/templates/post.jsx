@@ -1,4 +1,9 @@
-class Post extends React.Component {
+import React      from "react"
+import Helpers    from "../libs/helpers.jsx"
+import Form       from "./form.jsx"
+import { Attachment, AttachmentOld } from "./attachment.jsx"
+
+export default class Post extends React.Component {
   constructor(props) {
     super(props)
     this.state = props

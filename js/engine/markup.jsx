@@ -1,3 +1,6 @@
+import URL_REGEXP from "./url_regexp.jsx"
+import Helpers    from "../libs/helpers.jsx"
+
 class Markup {
   constructor () {
     this.entityMap = {
@@ -85,5 +88,4 @@ class Markup {
     })
   }
 }
-
-window.Markup = new Markup
+window.Markup = new Markup()

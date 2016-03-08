@@ -1,4 +1,7 @@
-class Attachment extends React.Component {
+import React    from "react"
+import Helpers  from "../libs/helpers.jsx"
+
+export class Attachment extends React.Component {
   constructor(props) {
     super(props)
     this.state = props
@@ -49,7 +52,7 @@ class Attachment extends React.Component {
   }
 }
 
-class AttachmentOld extends React.Component {
+export class AttachmentOld extends React.Component {
   render() {
     return(
       <div className="attachment">

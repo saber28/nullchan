@@ -1,4 +1,7 @@
-class Header extends React.Component {
+import React    from "react"
+import Helpers  from "../libs/helpers.jsx"
+
+export default class Header extends React.Component {
   constructor (props) {
     super(props)
     this.state = props
