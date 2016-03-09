@@ -1,3 +1,5 @@
+require("../libs/md5.js")
+
 class Files {
   constructor () {
     this.optionalOK = false

@@ -755,3 +755,48 @@ hr.white {
 .post-wrapper {
   overflow: hidden;
 }
+
+
+.pagify-pagination {
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.pagify-pagination:last-child {
+  margin-bottom: 15px;
+}
+
+.pagify-pagination div {
+  display: inline;
+}
+.pagify-pagination .page-el {
+  margin: 0;
+  margin-right: 10px;
+  padding: 0px 7px;
+  color: #aaa; 
+}
+
+.pagify-pagination .page-el:hover {
+  background: #777;
+}
+
+.pagify-pagination .ellipsis {
+  margin-right: 1em;
+  background: inherit;
+  cursor: default;
+}
+.pagify-pagination a {
+  text-decoration: none;
+}
+.pagify-pagination .selected a {
+  color: #9cc250;
+  text-decoration: underline;
+  cursor: default;
+}
+
+.pagify-pagination .selected a:hover {
+  background: none;
+  color: #9cc250 !important;
+}

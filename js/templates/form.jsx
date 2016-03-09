@@ -1,5 +1,7 @@
 import React    from "react"
 import AuthForm from "./auth_form.jsx"
+import Helpers  from "../libs/helpers.jsx"
+import Images   from "../engine/images.jsx"
 
 export default class Form extends React.Component {
   constructor(props) {

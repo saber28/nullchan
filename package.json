@@ -8,8 +8,13 @@
     "babel-preset-react": "^6.5.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-pagify": "^2.0.1",
+    "segmentize": "^0.4.1",
     "uglify-loader": "^1.3.0",
     "uglifyjs": "^2.4.10",
     "webpack": "^1.12.14"
+  },
+  "dependencies": {
+    "react-paginator": "0.0.5"
   }
 }

@@ -1,4 +1,4 @@
-class Images {
+export default class Images {
   static process(formData) {
     return new Promise((resolve, reject) => {
       if (!!!formData.file) {

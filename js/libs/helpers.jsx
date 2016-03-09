@@ -1,4 +1,4 @@
-class Helpers {
+export default class Helpers {
   static formatSizeUnits (bytes) {
     if      (bytes>=1000000000) { bytes=(bytes/1000000000).toFixed(2)+' GB' }
     else if (bytes>=1000000)    { bytes=(bytes/1000000).toFixed(2)+' MB'    }
@@ -57,5 +57,3 @@ class Helpers {
     return "/" + href
   }
 }
-
-export default Helpers

@@ -60,7 +60,7 @@ class View {
     })
   }
 
-  renderBoard (threadHash = null) {
+  renderBoard(page = 1, threadHash = null) {
     let promise
     if (threadHash == null) {
       promise = Threads.loadAll()
@@ -70,7 +70,7 @@ class View {
 
     promise.then((threads) => {
       this.rBoardPage = ReactDOM.render(
-        <BoardPage formShown={false} threads={threads} />, this.container
+        <BoardPage formShown={false} threads={threads} currentPage={page} />, this.container
       )
       this.hidePreloader()
       if (Nullchan.currentPage == "list") {
