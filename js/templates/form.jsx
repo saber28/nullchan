@@ -11,9 +11,16 @@ export default class Form extends React.Component {
 
   called(selectedText = null) {
     this._textarea.focus()
+    if (!!Nullchan.formText) {
+      this._textarea.value = Nullchan.formText + "\n"
+    }
     if (!!selectedText) {
       this._textarea.value = this._textarea.value + selectedText
     }
+  }
+
+  stashText() {
+    Nullchan.formText = this._node.getElementsByClassName("text")[0].value.trim()
   }
 
   showBlur() {

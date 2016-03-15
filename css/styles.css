@@ -60,9 +60,9 @@
   width: 295px;
   min-width: 295px;
   max-width: 295px;
-  height: 80px;
-  min-height: 80px;
-  max-height: 80px;
+  height: 90px;
+  min-height: 90px;
+  max-height: 90px;
 }
 
 .form input[type=text] {
@@ -147,7 +147,7 @@ body {
   padding: 0px 10px !important;
 }
 
-#header, #form-call-button {
+#header, #form-call-button, .post-reply-button, .form {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -262,6 +262,7 @@ a:hover {
 
 .post .info {
   font-size: 12px;
+  min-height: 17px;
 }
 
 .post .info.with-file {
@@ -508,14 +509,6 @@ em.spoiler {
 .thread {
   margin-top: 30px;
   margin-bottom: 50px;
-}
-
-.time-and-id {
-  cursor: pointer;
-}
-
-.time-and-id:hover .post-id {
-  color: #cf6 !important;
 }
 
 em.quote {
@@ -799,4 +792,35 @@ hr.white {
 .pagify-pagination .selected a:hover {
   background: none;
   color: #9cc250 !important;
+}
+
+
+.post-reply-button {
+  margin: 0px 10px;
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 1px dotted;
+  opacity: 0;
+  display: inline;
+}
+
+.post-reply-button.shown {
+  opacity: 1 !important;
+  color: #888 !important;
+  font-weight: bold !important;
+  cursor: default;
+}
+
+.post-reply-button.shown:hover {
+  color: #888 !important;
+}
+
+.post-wrapper:hover .post-reply-button {
+  opacity: 1;
+  color: #9cc250;  
+}
+
+.post-reply-button:hover {
+  color: #cf6 !important;
+  font-weight: bold;
 }

@@ -41,12 +41,15 @@ export default class Post extends React.Component {
   }
 
   callForm() {
-    if (View.formBlurred) {
+    if (View.formBlurred || this.state.showForm) {
       return
     }
 
     if (!!View.postWithReplyForm) {
       View.postWithReplyForm.setState({showForm: false})
+      if (!!View.rReplyForm) {
+        View.rReplyForm.stashText()
+      }
     }
     View.postWithReplyForm = this
     this.setState({showForm: true}, () => { 
@@ -59,9 +62,11 @@ export default class Post extends React.Component {
     let button  = ""
     let picture = ""
     let form    = ""
+    let reply   = "reply"
 
-    let userNameClass = ""
-    let infoClassName = "info"
+    let replyClassName  = "post-reply-button"
+    let userNameClass   = ""
+    let infoClassName   = "info"
 
     if (!!this.state.data.parent) {
       klass += " reply"
@@ -82,9 +87,13 @@ export default class Post extends React.Component {
       picture = <AttachmentOld urlFull={this.state.data.file_full} urlThumb={this.state.data.file_thumb} />
     }
 
+
+
     if (this.state.showForm == true) {
       form = <Form hidden={false} ref={(f) => View.rReplyForm = f} 
         isReply={true} parent={this.state.data.parent || this.state.data.hashsum} />
+      reply = "replying"
+      replyClassName += " shown"
     }
 
     if (this.state.data.anonymous) {
@@ -103,7 +112,8 @@ export default class Post extends React.Component {
               &nbsp;wrote&nbsp;
               {this.formattedTime()},
               &nbsp;
-              <em className="post-id" onClick={this.callForm.bind(this)}>#{this.shortHashsum()}</em>
+              <em className="post-id">#{this.shortHashsum()}</em>
+              <em className={replyClassName} onClick={this.callForm.bind(this)}>{reply}</em>
             </div>
             {button}
           </div>
