@@ -52,7 +52,7 @@ export default class MainPage extends React.Component {
                   <hr/>
                   <span>
                     <em>Engine development status:</em>
-                    Had some days off, will deliver a couple of nice features this weekend (06.03.2016)
+                    Working on post previews (15.03.2016)
                   </span>
                   <br/>
                   &nbsp;

@@ -10,19 +10,19 @@ class View {
   get header    () { return this._header    }
   get preloader () { return this._preloader }
 
-  constructor () {
+  constructor() {
     for (let name of ["container", "header", "preloader"]) {
       this[`_${name}`] = document.getElementById(name)
     }
   }
 
-  showPreloader () {
+  showPreloader() {
     this.preloader.className     = ""
     this.container.style.display = "none"
     setTimeout(() => { this.preloader.className = "shown" }, 600)
   }
 
-  hidePreloader () {
+  hidePreloader() {
     this.preloader.className     = ""
     this.preloader.style.display = "none"
     this.container.style.display = "block"
@@ -30,11 +30,11 @@ class View {
     setTimeout(() => { this.container.className = "" }, 1000)
   }
 
-  renderHeader (siteInfo) {
+  renderHeader(siteInfo) {
     this.rHeader = ReactDOM.render(<Header siteInfo={Nullchan.siteInfo} board={ {} }/>, this.header)
   }
 
-  updateHeader () {
+  updateHeader() {
     if (Nullchan.currentPage != "main") {
       this.header.className = "with-border"
     } else {
@@ -46,7 +46,7 @@ class View {
     }
   }
 
-  renderMainPage () {
+  renderMainPage() {
     Threads.updateLastPost().then(() => {
       this.rMainPage = ReactDOM.render(
         <MainPage 

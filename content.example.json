@@ -1,5 +1,5 @@
 {
- "ignore": "(.git|data/users|node_modules|data/0chan.db|webpack.config.js|update_files.rb|package.json|content.example.json|data/settings.example.json|LICENSE|README.md|js/engine/.*|js/templates|js/libs)", 
+ "ignore": "(.git|data/users|node_modules|js/index.js|data/0chan.db|webpack.config.js|update_files.rb|package.json|content.example.json|data/settings.example.json|LICENSE|README.md|js/engine/.*|js/templates|js/libs)", 
  "includes": {
   "data/users/content.json": {
    "signers": [], 

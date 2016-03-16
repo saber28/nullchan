@@ -8,7 +8,7 @@ export default class Database {
   }
 
   static getLastPost () {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let query = `
         SELECT message.* FROM message
         ORDER BY message.created_at DESC LIMIT 10
@@ -22,6 +22,8 @@ export default class Database {
           resolve(post)
           break
         }
+
+        reject()
       })
     })
   }

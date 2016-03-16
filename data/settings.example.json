@@ -1,6 +1,7 @@
 {
   "siteName": "My new imageboard", 
   "siteAddress": "0chan.bit", 
+  "threadsPerPage": 15,
 
   "boards": [
     {

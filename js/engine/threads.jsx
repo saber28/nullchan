@@ -22,7 +22,7 @@ class Threads {
       Database.getLastPost().then((post) => {
         this._lastPost = post
         resolve()
-      })
+      }).catch((err) => { resolve() }) // anyway
     })
   }
 
