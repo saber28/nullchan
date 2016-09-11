@@ -8,31 +8,14 @@ export default class Header extends React.Component {
   }
 
   render () {
-    this.link = <BoardLink boardKey={this.state.board.key} boardName={this.state.board.name} />
     return (
-      <div>
-        {this.link}
-        <div id="stats">{this.state.siteInfo.settings.peers} peers,&nbsp;
-        {Helpers.formatSizeUnits(this.state.siteInfo.settings.size)}</div>
+      <div id="board-header"> 
+        <h1>/<em>{this.state.board.key}</em>/ — <em>{this.state.board.name}</em></h1>
+        <h2>{this.state.board.description}</h2>
+
+        <a href={Helpers.fixLink(`/${Nullchan.engineSettings.siteAddress}`)} 
+          target="_parent" className="to-main">[back to all boards]</a>
       </div>
     )
   }
-}
-
-class BoardLink extends React.Component {
-  render () {
-    var display = "none"
-    if (!!this.props.boardName) {
-      display = "inline-block"
-    }
-    return(
-      <span style={{display}}>
-        <a href={Helpers.fixLink(`?/${this.props.boardKey}/`)} 
-          className="board-name" target="_parent">{this.props.boardName}</a>
-        &nbsp;on&nbsp;
-        <a href={Helpers.fixLink(`/${Nullchan.engineSettings.siteAddress}`)} target="_parent" 
-          id="nullchan-link" className="to-main">{Nullchan.engineSettings.siteName}</a>
-      </span>
-    )
-  } 
 }

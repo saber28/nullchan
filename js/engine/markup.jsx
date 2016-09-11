@@ -21,9 +21,10 @@ class Markup {
           return match
         }
 
+        let fakeID = Threads.hashToNum[post.hashsum]
         let parent = post.parent || post.hashsum
         let url    = Helpers.fixLink(`/${Nullchan.engineSettings.siteAddress}/?/${post.board}/thread/${parent}/${content}`)
-        return `<a class="reflink" href="${url}">&gt;&gt;${content}</a>`
+        return `<a class="reflink" href="${url}">&gt;&gt;${fakeID}</a>`
       }],
 
       // quote
@@ -69,8 +70,8 @@ class Markup {
         return match
       }
       let link = match
-      if (link.length > 50) {
-        link = link.substring(0, 50) + "..."
+      if (link.length > 100) {
+        link = link.substring(0, 100) + "..."
       }
       link  = link.replace("&amp;", "&")
       match = match.replace("&amp;", "&")

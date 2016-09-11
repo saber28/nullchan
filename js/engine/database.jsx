@@ -7,6 +7,33 @@ export default class Database {
     })
   }
 
+  static loadHashesAndTimestamps(boardKey) {
+    return new Promise((resolve, reject) => {
+      let query = `
+        SELECT hashsum FROM message WHERE board = '${boardKey}'
+        ORDER BY created_at ASC
+      `
+
+      this.execute(query).then((response) => { 
+        let result = []
+        for (let post of response) {
+          result.push(post.hashsum)
+        }
+
+        resolve(result)
+      })
+    })
+  }
+
+  static getTotalCount() {
+    return new Promise((resolve, reject) => {
+      this.execute("SELECT count(*) FROM message").then((totresp) => {  
+        let total = totresp[0]["count(*)"]
+        resolve(total)
+      })
+    })
+  }
+
   static getLastPost () {
     return new Promise((resolve, reject) => {
       let query = `

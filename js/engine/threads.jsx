@@ -4,6 +4,9 @@ import Helpers  from "../libs/helpers.jsx"
 class Threads {
   get cachedPosts () { return this._cachedPosts }
   get shortMap    () { return this._shortMap    }
+  get entMap      () { return this._entMap      }
+  get numToHash   () { return this._numToHash   }
+  get hashToNum   () { return this._hashToNum   }
 
   get lastPostTime () { 
     if (!this._lastPost) {
@@ -12,16 +15,42 @@ class Threads {
     return Helpers.timeSince(this._lastPost.created_at) 
   }
 
+  get totalPosts () { 
+    if (!this._totalPosts) {
+      return "N/A"
+    }
+    return this._totalPosts
+  }
+
   constructor () {
     this._shortMap    = {}
     this._cachedPosts = {}
+    this._entMap      = {}
+    this._numToHash   = {}
+    this._hashToNum   = {}
+  }
+
+  loadNumbers() {
+    return new Promise((resolve) => {
+      Database.loadHashesAndTimestamps(Nullchan.currentBoard.key).then((hashes) => {
+        for (var i = hashes.length - 1; i >= 0; i--) {
+          this.numToHash[i + 1] = hashes[i]
+          this.hashToNum[hashes[i]] = i + 1
+        }
+        resolve()  
+      })
+      console.log(this.numToHash)
+    })
   }
 
   updateLastPost () {
     return new Promise((resolve) => {
       Database.getLastPost().then((post) => {
         this._lastPost = post
-        resolve()
+        Database.getTotalCount().then((total) => {
+          this._totalPosts = total
+          resolve()
+        })
       }).catch((err) => { resolve() }) // anyway
     })
   }

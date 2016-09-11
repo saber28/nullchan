@@ -26,8 +26,8 @@ class View {
     this.preloader.className     = ""
     this.preloader.style.display = "none"
     this.container.style.display = "block"
-    this.container.className     = "fadein"
-    setTimeout(() => { this.container.className = "" }, 1000)
+    // this.container.className     = "fadein"
+    // setTimeout(() => { this.container.className = "" }, 1000)
   }
 
   renderHeader(siteInfo) {
@@ -35,8 +35,8 @@ class View {
   }
 
   updateHeader() {
-    if (Nullchan.currentPage != "main") {
-      this.header.className = "with-border"
+    if (Nullchan.currentPage == "main") {
+      this.header.className = "hidden"
     } else {
       this.header.className = ""
     }
@@ -53,6 +53,7 @@ class View {
           boards={Boards.list} 
           siteInfo={Nullchan.siteInfo}
           lastPostTime={Threads.lastPostTime}
+          totalPosts={Threads.totalPosts}
         />, this.container
       )
 
@@ -68,15 +69,26 @@ class View {
       promise = Threads.loadSingle(threadHash)
     }
 
-    promise.then((threads) => {
-      this.rBoardPage = ReactDOM.render(
-        <BoardPage formShown={false} threads={threads} currentPage={page} />, this.container
-      )
-      this.hidePreloader()
-      if (Nullchan.currentPage == "list") {
-        SeenCount.setLocalCounter(Nullchan.currentBoard.key)  
-      }
+    Threads.loadNumbers().then(() => {
+      promise.then((threads) => {
+        this.rBoardPage = ReactDOM.render(
+          <BoardPage formShown={false} threads={threads} currentPage={page} />, this.container
+        )
+        this.renderRefLinks()
+        this.hidePreloader()
+        if (Nullchan.currentPage == "list") {
+          SeenCount.setLocalCounter(Nullchan.currentBoard.key)  
+        }
+      })
     })
+  }
+
+  renderRefLinks() {
+    for (let shortHash in Threads.entMap) {
+      let post = Threads.entMap[shortHash]
+
+      post.heyBitch()
+    }
   }
 
   renderNotFound () {

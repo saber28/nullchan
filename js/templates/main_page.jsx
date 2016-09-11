@@ -34,25 +34,29 @@ export default class MainPage extends React.Component {
                     })}
                   </tbody>
                 </table>
-                <span>
+                <span className="counters">
                   last post: <em id="last-post">{this.state.lastPostTime}</em>
+                  <br/>
+                  total posts: <em id="total-posts">{this.state.totalPosts}</em>
                 </span>
               </td>
               <td>
                 <blockquote>
                   <strong>{Nullchan.engineSettings.siteName}</strong> is a decentralised P2P imageboard
-                  powered by <a className="muted" href="https://github.com/Nullchan/nullchan" target="_parent">Nullchan</a> engine
-                  running on <a className="muted" href="https://github.com/HelloZeroNet/ZeroNet" target="_parent">ZeroNet</a>.
+                  powered by <a href="https://github.com/Nullchan/nullchan" target="_parent">Nullchan</a> engine
+                  running on <a href="https://github.com/HelloZeroNet/ZeroNet" target="_parent">ZeroNet</a>.
                   <br/><br/>
                   The engine is still very early in development and thus this site is basically 
-                  just a tech demo which misses a lot of crucial features, 
+                  just a proof-of-concept tech demo which misses a lot of crucial features, 
                   but it will get better with time.
                   <br/>
                   <br/>
                   <hr/>
                   <span>
-                    <em>Engine development status:</em>
-                    Working on post previews (15.03.2016)
+                    <em>Status:</em>
+                    Did some restyling, working on post previews and GIF support now.
+                    <br/><br/>
+                    11.09.2016
                   </span>
                   <br/>
                   &nbsp;

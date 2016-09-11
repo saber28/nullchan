@@ -22,6 +22,12 @@ export default class AuthForm extends React.Component {
 
   render () {
     let content
+    let submitText = "New Thread"
+
+    if (this.state.isReply) {
+      submitText = "New Reply"
+    }
+
     if (!!!this.state.userName) {
       content = <div className="auth-please" onClick={this.showAuthDialog}>
         <u>Authorize</u> to post messages.<br/>
@@ -34,7 +40,7 @@ export default class AuthForm extends React.Component {
           <option value="signed">{this.state.userName}</option>
           <option value="other">select other...</option>
         </select>      
-        <input type="submit" value="Submit!" className="submit" />
+        <input type="submit" value={submitText} className="submit" />
       </div>
     }
 

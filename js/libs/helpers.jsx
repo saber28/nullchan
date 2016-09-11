@@ -24,7 +24,7 @@ export default class Helpers {
     } else if (secs < 60 * 60 * 24 * 3) {
       back = (Math.round(secs / 60 / 60 / 24)) + " days ago"
     } else {
-      back = "on " + this.formatDate(time)
+      back = this.formatDate(time)
     }
     back = back.replace(/^1 ([a-z]+)s/, "1 $1")
     return back

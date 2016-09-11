@@ -9,8 +9,17 @@ export default class Post extends React.Component {
     this.state = props
   }
 
+  heyBitch() {
+    // console.log("Oh sheit!")
+    // console.log(this.shortHashsum())
+  }
+
   shortHashsum() {
     return this.state.data.hashsum.substring(22, 32)
+  }
+
+  postNum() {
+    return Threads.hashToNum[this.state.data.hashsum]
   }
 
   userName() {
@@ -55,6 +64,8 @@ export default class Post extends React.Component {
     this.setState({showForm: true}, () => { 
       View.rReplyForm.called(`>>${this.shortHashsum()}\n`)
     })    
+
+    console.log(Threads.entMap)
   }
 
   render() {
@@ -75,18 +86,22 @@ export default class Post extends React.Component {
       if (Nullchan.currentPage == "list") {
         button = <a target="_parent" className="thread-link" 
           href={Helpers.fixLink(`?/${this.state.data.board}/thread/${this.state.data.hashsum}`)}>
-            [&nbsp;<span className="highlighted">open thread</span>&nbsp;]
+            [Reply]
         </a>
       }
     }
 
     if (!!this.state.data.attachment) {
       infoClassName += " with-file"
+      klass += " with-file"
       picture = <Attachment data={this.state.data} />
     } else if (!!this.state.data.file_thumb) {
       picture = <AttachmentOld urlFull={this.state.data.file_full} urlThumb={this.state.data.file_thumb} />
     }
 
+    if (this.state.data.body.length > 0) {
+      klass += " not-empty"
+    }
 
 
     if (this.state.showForm == true) {
@@ -109,11 +124,10 @@ export default class Post extends React.Component {
               <strong className={userNameClass}>
                 {!!this.state.data.anonymous ? "Anonymous" : `${this.userName()}`}
               </strong>
-              &nbsp;wrote&nbsp;
+              &nbsp;
               {this.formattedTime()},
               &nbsp;
-              <em className="post-id">#{this.shortHashsum()}</em>
-              <em className={replyClassName} onClick={this.callForm.bind(this)}>{reply}</em>
+              <em className="post-id" onClick={this.callForm.bind(this)}>No.{this.postNum()}</em>
             </div>
             {button}
           </div>

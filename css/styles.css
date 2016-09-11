@@ -1,4 +1,4 @@
-#top-form, #reply-form {
+.#top-form, #reply-form {
   display: table;
   width: 416px;
   color: #aaa;
@@ -47,8 +47,9 @@
   font-size: 12px;
   padding: 3px 5px;
   width: 100px;
-  background-color: #2C2C2C;
-  border: 1px solid #575757;
+  background: #282828;
+  border: 1px solid #111;
+  color: #d8d8d8;
 }
 
 .form tr td:last-child {
@@ -60,9 +61,9 @@
   width: 295px;
   min-width: 295px;
   max-width: 295px;
-  height: 90px;
-  min-height: 90px;
-  max-height: 90px;
+  height: 110px;
+  min-height: 110px;
+  max-height: 110px;
 }
 
 .form input[type=text] {
@@ -74,13 +75,14 @@
 }
 
 .form input[type=text], textarea {
-  background: #ddd;
-  color: #000;
+  background: #282828;
+  border: 1px solid #383838;
+  color: #d8d8d8;
 }
 
 .form .submit {
   float: right;
-  width: 70px;
+  // width: 70px;
   font-family: 'Noto Sans', sans-serif !important;
   font-size: 12px;
 }
@@ -129,18 +131,18 @@
 
 
 html, body {
-  background: #222;
-  color: #fff;
-  font-family: 'Noto Sans', sans-serif;
+  background: #181818;
+  color: #d8d8d8;
+  font-family: arial,helvetica,sans-serif;
+  min-width: 900px;
   margin: 0px;
   padding: 0px;
-  line-height: 1.25;
 }
+
 
 html {
   height: 100%;
   width: 100%;
-  overflow: hidden;
 }
 
 body {
@@ -162,18 +164,32 @@ body {
 }
 
 #header {
-  max-width: 900px;
+  // max-width: 900px;
   // min-height: 10px;
   margin: 0 auto;
-  color: #999;
+  color: #ab4642;
   padding: 10px 0px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 14px;
-  border-bottom: 1px solid #222;
+  font-family: Tahoma;
+  text-align: center;
 }
 
-#header.with-border {
-  border-color: #555;
+#board-header h1 {
+  font-size: 18pt;
+  margin: 0px;
+}
+
+#board-header h2 {
+  font-size: 9pt;
+  margin: 0px;
+  font-weight: normal;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: #ab4642;
+}
+
+
+#header.hidden {
+  display: none;
 }
 
 hr {
@@ -220,22 +236,24 @@ hr {
 }
 
 #header, #container {
-  max-width: 900px;
-  margin: 0 auto;
+  // max-width: 900px;
+  // margin: 5px;
 }
 
-#header a.to-main {
-  color: #999;
-  /*text-decoration: none;*/
-}
-
-#header a.board-name {
-  color: #9cc250;
+a {
+  color: #7cafc2;
 }
 
 a:hover {
-  color: #cf6 !important;
+  color: #86c1b9;
 }
+
+#header a {
+  text-decoration: none;
+  font-size: 8pt;
+  margin: 4px;
+}
+
 
 #container {
   padding-top: 10px;
@@ -244,15 +262,21 @@ a:hover {
 
 .post {
   display: table;
-  min-width: 400px;
+  min-width: 420px;
   overflow: hidden;
-  margin: 3px 0px;
+  margin: 0.2em 4px;
+  max-width: 94%!important;
+  padding: 0.5em 0.3em 0.5em 0.6em;
   position: relative;
   border: 1px solid;
 }
 
+.post.with-file.not-empty {
+  min-width: 520px;
+}
+
 .post.opening {
-  border-color: #222;
+  border-color: #181818;
 }
 
 .post .title a {
@@ -273,14 +297,14 @@ a:hover {
   display: inline-block;
   color: #888;
   margin-bottom: 6px;
-  margin-top: 3px;
+  margin-top: 5px;
 }
 
 .post .post-id {
+  font-weight: normal;
   text-decoration: none;
-  color: inherit;
+  color: #aaa;
   font-style: normal;
-  font-weight: bold;
 }
 
 .post .time-and-id strong {
@@ -327,12 +351,11 @@ a:hover {
 }
 
 .post .text {
-  color: #ccc;
   border: none;
-  margin: 0px;
   padding: 0px;
   font-size: 13px;
-  font-family: 'Noto Sans', sans-serif;
+  color: #d8d8d8;
+  margin: 5px 5px 5px 15px;
 }
 
 .post .references {
@@ -343,34 +366,41 @@ a:hover {
 
 .skip-gap {
   border: 1px dashed #777;
-  padding: 5px 7px;
+  padding: 6px 8px;
   display: table;
   color: #777;
   font-size: 12px;
-  margin: 7px 0px;
+  margin: 0.3em 4px;
   cursor: pointer;
 }
 
 .skip-gap:hover {
-  border-color: #cf6;
+  border-color: #86c1b9;
+}
+
+.thread-link:hover {
+  color: #86c1b9;
 }
 
 .skip-gap:hover .expand-button {
-  color: #cf6;
+  color: #86c1b9;
 }
 
 .expand-button {
-  color: #9cc250;
+  color: #7cafc2;
   text-decoration: underline;
 }
 
 .post.reply {
-  background-color: #2C2C2C;
-  border-color: #575757;
-}
-
-.post.reply {
+  background-color: #282828;
+  border-width: 1px;
+  border-style: solid;
+  border-left-color: #383838;
+  border-top-color: #383838;
+  border-right-color: #282828;
+  border-bottom-color: #282828;
   padding: 0px 7px 10px 7px;
+  
 }
 
 .post.reply .time-and-id {
@@ -432,7 +462,7 @@ a:hover {
   float: right;
   height: 32px;
   background: #333;
-  width: 150px;
+  // width: 150px;
 }
 
 .editbox {
@@ -507,13 +537,13 @@ em.spoiler {
 
 
 .thread {
-  margin-top: 30px;
-  margin-bottom: 50px;
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 em.quote {
   font-style: normal;
-  color: #7a6;
+  color: #789922;
 }
 
 #canvas {
@@ -570,23 +600,19 @@ em.quote {
 
 .thread-link {
   display: inline-block;
-  color: #777;
-  margin-left: 5px;
+  color: #7cafc2;
+  margin-left: 10px;
   text-decoration: none;
-}
-
-.thread-link span.highlighted {
-  text-decoration: underline;
-  color: #9cc250;
+  font-size: 10pt;
 }
 
 .thread-link:hover {
-  color: #cf6;
+  color: #86c1b9;
 }
 
 .thread-link:hover span {
   text-decoration: none;
-  color: #cf6;
+  color: #86c1b9;
 }
 
 #not-found {
@@ -653,31 +679,21 @@ hr.white {
 #board-list span, .board-list-container span {
   color: #888;
   font-size: 12px;
-  font-family: Trebuchet, "Trebuchet MS", sans-serif;
+  font-family: tahoma;
 }
-
 
 #board-list .unread {
   text-align: right;
   padding-right: 4px;
   font-size: 11px !important;
   min-width: 10px;
-  color: #cf6;
+  color: #86c1b9;
 }
 
 #board-list td {
   text-align: left;
   padding: 3px 0px 3px 0px;
 }
-
-#glagne a {
-  color: #ccc;
-}
-
-#glagne a:hover {
-  color: #cf6;
-}
-
 
 .inner table {
   width: 100%;
@@ -731,11 +747,11 @@ hr.white {
 }
 
 .post .text a {
-  color: #9cc250;  
+  color: #7cafc2;  
 }
 
 .post .text a:hover {
-  color: #cf6 !important;
+  color: #86c1b9 !important;
 }
 
 .post .text hr {
@@ -784,14 +800,14 @@ hr.white {
   text-decoration: none;
 }
 .pagify-pagination .selected a {
-  color: #9cc250;
+  color: #7cafc2;
   text-decoration: underline;
   cursor: default;
 }
 
 .pagify-pagination .selected a:hover {
   background: none;
-  color: #9cc250 !important;
+  color: #7cafc2 !important;
 }
 
 
@@ -817,10 +833,35 @@ hr.white {
 
 .post-wrapper:hover .post-reply-button {
   opacity: 1;
-  color: #9cc250;  
+  color: #7cafc2;  
 }
 
 .post-reply-button:hover {
   color: #cf6 !important;
   font-weight: bold;
+}
+
+a.to-threads {
+  display: table;
+  width: 200px;
+  position: absolute;
+  top: 130px;
+  left: 40px;
+  font-size: 14px;
+  text-decoration: none !important;
+}
+
+a.to-threads:hover em {
+  color: #86c1b9;
+}
+
+a.to-threads em {
+  font-size: 50px;
+  color: #888;
+}
+
+#glagne .counters {
+  margin-top: 15px;
+  color: #bbb;
+  display: table;
 }

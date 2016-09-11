@@ -92,7 +92,7 @@ export default class Form extends React.Component {
   }
 
   render() {
-    var display = "block"
+    var display = "table"
     var id      = "top-form"
 
     if (this.props.hidden == true) {
@@ -131,7 +131,7 @@ export default class Form extends React.Component {
             <tr>
               <td>Sign as</td>
               <td>
-                <AuthForm ref={(a) => View.rAuthForm = a} userName={Nullchan.shortUserName()} />
+                <AuthForm ref={(a) => View.rAuthForm = a} userName={Nullchan.shortUserName()} isReply={!!this.state.parent} />
               </td>
             </tr>
           </tbody>

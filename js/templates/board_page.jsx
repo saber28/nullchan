@@ -2,6 +2,7 @@ import React      from "react"
 import PageBox    from "./page_box.jsx"
 import Thread     from "./thread.jsx"
 import Form       from "./form.jsx"
+import Helpers    from "../libs/helpers.jsx"
 import FormButton from "./form_button.jsx"
 
 export default class BoardPage extends React.Component {
@@ -40,10 +41,14 @@ export default class BoardPage extends React.Component {
     let buttonText = "create new thread"
     let threads
     let pageBox
+    let linkToList
 
     if (Nullchan.currentPage == "thread") { 
       buttonText = "reply to this thread"
       parent = this.props.threads[0][0].hashsum
+
+      linkToList = <a href={Helpers.fixLink(`?/${Nullchan.currentBoard.key}/`)} target="_parent"
+       className="to-threads"><em>←</em><br/>back to all threads</a>
     }
 
     if (!!!this.props.threads) {
@@ -70,11 +75,9 @@ export default class BoardPage extends React.Component {
 
     return (
       <div id="board-page">
-        <FormButton text={buttonText} hidden={this.state.formShown} />
-        <Form hidden={!this.state.formShown} ref={(f) => this.rForm = f} parent={parent} />
+        <Form ref={(f) => this.rForm = f} parent={parent} />
+        {linkToList}
         <hr />
-
-        {pageBox}
         {content}
         {pageBox}
       </div>
