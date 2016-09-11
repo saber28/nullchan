@@ -30,6 +30,20 @@ class View {
     // setTimeout(() => { this.container.className = "" }, 1000)
   }
 
+  highlightPost(shortHash, fallbackURL) {
+    if (!!!shortHash) {
+      return
+    }
+    let post = Threads.entMap[shortHash]
+    if (!!post) {
+      post.highlight()
+    } else {
+      if (fallbackURL) {
+        window.top.location.href = fallbackURL  
+      }
+    }
+  }
+
   renderHeader(siteInfo) {
     this.rHeader = ReactDOM.render(<Header siteInfo={Nullchan.siteInfo} board={ {} }/>, this.header)
   }
@@ -74,21 +88,17 @@ class View {
         this.rBoardPage = ReactDOM.render(
           <BoardPage formShown={false} threads={threads} currentPage={page} />, this.container
         )
-        this.renderRefLinks()
         this.hidePreloader()
         if (Nullchan.currentPage == "list") {
           SeenCount.setLocalCounter(Nullchan.currentBoard.key)  
         }
+
+        let hl = window.location.search.match(/hl-(\w+)/)
+        if (!!hl) {
+          this.highlightPost(hl[1])
+        }
       })
     })
-  }
-
-  renderRefLinks() {
-    for (let shortHash in Threads.entMap) {
-      let post = Threads.entMap[shortHash]
-
-      post.heyBitch()
-    }
   }
 
   renderNotFound () {

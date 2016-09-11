@@ -14,17 +14,17 @@ class Markup {
     }
 
     this.expressions = [
-      // reflinks 
-      [/&gt;&gt;(\w+)/mg, (match, content) => {
-        let post = Threads.shortMap[content]
-        if (!!!post) {
+      //reflinks
+      [/&gt;&gt;(\w+)/mg, (match, shortHash) => {
+        let target = Threads.shortMap[shortHash]
+        if (!!!target) {
           return match
         }
 
-        let fakeID = Threads.hashToNum[post.hashsum]
-        let parent = post.parent || post.hashsum
-        let url    = Helpers.fixLink(`/${Nullchan.engineSettings.siteAddress}/?/${post.board}/thread/${parent}/${content}`)
-        return `<a class="reflink" href="${url}">&gt;&gt;${fakeID}</a>`
+        let fakeID = Threads.hashToNum[target.hashsum]
+        let parent = target.parent || target.hashsum
+        let url    = Helpers.fixLink(`?/${target.board}/thread/${parent}/hl-${shortHash}`)
+        return `<a class="reflink" href="${url}" data-hash="${shortHash}">&gt;&gt;${fakeID}</a>`
       }],
 
       // quote
@@ -63,7 +63,7 @@ class Markup {
     ]
   }
 
-  render (content) {
+  render (content, post) {
     content = this.escapeHTML(content).trim()
     content = content.replace(URL_REGEXP, (match, text) => {
       if (!!match.match('@') || !(match.startsWith("http") || match.startsWith("magnet"))) {
@@ -77,6 +77,9 @@ class Markup {
       match = match.replace("&amp;", "&")
       return `<a href='${match}' target='_parent' data-no-push='true'>${link}</a>`
     })
+
+    content = content.replace()
+
 
     for (let exp of this.expressions) {
       content = content.replace(exp[0], exp[1])

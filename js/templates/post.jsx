@@ -3,15 +3,54 @@ import Helpers    from "../libs/helpers.jsx"
 import Form       from "./form.jsx"
 import { Attachment, AttachmentOld } from "./attachment.jsx"
 
+export default class Reflinks extends React.Component {
+  generateURL(link) {
+    let short = link.key.substring(22, 32)
+    return Helpers.fixLink(`?${Nullchan.currentBoard.key}/thread/${link.parent}/hl-${short}`) 
+  }
+
+  bodyClick(event) {
+    let link = null
+
+    if (event.target.className == "reflink") {
+      link = event.target
+    }
+    if (event.target.parentNode.className == "reflink") {
+      link = event.target.parentNode
+    }
+
+    if (!!link) {
+      event.preventDefault()
+      View.highlightPost(link.dataset.hash, link.href)
+    }
+  }
+
+
+  render() {
+    let links = (Threads.reflinkMap[this.props.post] || []).map((ref) => {
+      let post = Threads.shortMap[ref]
+      return {
+        key:    post.hashsum,
+        short:  ref,
+        num:    Threads.hashToNum[post.hashsum],
+        parent: (post.parent || post.hashsum)
+      }
+    }).sort((a, b) => { return a.num - b.num })
+
+    return <div className="reflinks" onClick={this.bodyClick}>
+      {links.map((link) => {
+        return <a 
+          href={this.generateURL(link)} 
+          className="reflink" data-hash={link.short} key={"ref" + link.short}>&gt;&gt;{link.num}</a>
+      })}
+    </div>
+  }
+}
+
 export default class Post extends React.Component {
   constructor(props) {
     super(props)
     this.state = props
-  }
-
-  heyBitch() {
-    // console.log("Oh sheit!")
-    // console.log(this.shortHashsum())
   }
 
   shortHashsum() {
@@ -19,7 +58,7 @@ export default class Post extends React.Component {
   }
 
   postNum() {
-    return Threads.hashToNum[this.state.data.hashsum]
+    return Threads.hashToNum[this.state.data.hashsum] || this.shortHashsum()
   }
 
   userName() {
@@ -31,21 +70,28 @@ export default class Post extends React.Component {
   }
 
   renderMarkup() {
-    return { __html: Markup.render(this.state.data.body) }
+    return { __html: Markup.render(this.state.data.body, this) }
+  }
+
+  highlight() {
+    this.wrapper.scrollIntoView()
+    this.setState({highlighted: true})
+    setTimeout((() => { this.setState({highlighted: false}) }).bind(this), 2000)
   }
 
   bodyClick(event) {
-    if (event.target.className == "reflink") {
-      var hash = event.target.innerHTML.substring(8)
-      var post = Threads.shortMap[hash]
+    let link = null
 
-      if (!!post) {
-        var node = document.getElementById(`post-${post.hashsum}`)
-        if (!!node) {
-          event.preventDefault()  
-          node.scrollIntoView()
-        }
-      }
+    if (event.target.className == "reflink") {
+      link = event.target
+    }
+    if (event.target.parentNode.className == "reflink") {
+      link = event.target.parentNode
+    }
+
+    if (!!link) {
+      event.preventDefault()
+      View.highlightPost(link.dataset.hash, link.href)
     }
   }
 
@@ -64,8 +110,6 @@ export default class Post extends React.Component {
     this.setState({showForm: true}, () => { 
       View.rReplyForm.called(`>>${this.shortHashsum()}\n`)
     })    
-
-    console.log(Threads.entMap)
   }
 
   render() {
@@ -78,6 +122,10 @@ export default class Post extends React.Component {
     let replyClassName  = "post-reply-button"
     let userNameClass   = ""
     let infoClassName   = "info"
+
+    if (!!this.state.highlighted) {
+      klass += " highlighted"
+    }
 
     if (!!this.state.data.parent) {
       klass += " reply"
@@ -116,7 +164,7 @@ export default class Post extends React.Component {
     }
 
     return(
-      <div className="post-wrapper">
+      <div className="post-wrapper" ref={(r) => { this.wrapper = r }}>
         <div className={klass}
           data-hashsum={this.state.data.hashsum} id={`post-${this.state.data.hashsum}`}>
           <div className={infoClassName}>
@@ -128,11 +176,16 @@ export default class Post extends React.Component {
               {this.formattedTime()},
               &nbsp;
               <em className="post-id" onClick={this.callForm.bind(this)}>No.{this.postNum()}</em>
+              <Reflinks post={this.shortHashsum()} />
             </div>
             {button}
           </div>
           {picture}
-          <blockquote className="text" onClick={this.bodyClick} 
+          <blockquote className="text" onClick={this.bodyClick} ref={ (b) => {
+            if (b != null) {
+              this.text = b
+            }
+          }}
             dangerouslySetInnerHTML={this.renderMarkup()}></blockquote>
         </div>
         {form}

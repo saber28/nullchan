@@ -271,6 +271,10 @@ a:hover {
   border: 1px solid;
 }
 
+#reply-form {
+  margin: 0.2em 4px;
+}
+
 .post.with-file.not-empty {
   min-width: 520px;
 }
@@ -293,6 +297,11 @@ a:hover {
   line-height: 0.6;
 }
 
+.post.highlighted {
+  border: 1px solid #666 !important;
+  background-color: #373737 !important;
+}
+
 .post .time-and-id {
   display: inline-block;
   color: #888;
@@ -305,6 +314,11 @@ a:hover {
   text-decoration: none;
   color: #aaa;
   font-style: normal;
+  cursor: pointer;
+}
+
+.post-id:hover {
+  color: #86c1b9;
 }
 
 .post .time-and-id strong {
@@ -864,4 +878,15 @@ a.to-threads em {
   margin-top: 15px;
   color: #bbb;
   display: table;
+}
+
+.reflinks {
+  display: inline-block;
+  margin: 0px 6px;
+  font-size: 10px;
+}
+
+.reflinks a {
+  text-decoration: none;
+  margin-right: 5px;
 }

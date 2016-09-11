@@ -7,6 +7,7 @@ class Threads {
   get entMap      () { return this._entMap      }
   get numToHash   () { return this._numToHash   }
   get hashToNum   () { return this._hashToNum   }
+  get reflinkMap  () { return this._reflinkMap  }
 
   get lastPostTime () { 
     if (!this._lastPost) {
@@ -28,6 +29,14 @@ class Threads {
     this._entMap      = {}
     this._numToHash   = {}
     this._hashToNum   = {}
+    this._reflinkMap  = {}
+  }
+
+  registerReflink(fromHash, toHash) {
+    if (!!!this._reflinkMap[toHash]) {
+      this._reflinkMap[toHash] = []      
+    }
+    this._reflinkMap[toHash].push(fromHash)
   }
 
   loadNumbers() {
@@ -39,7 +48,6 @@ class Threads {
         }
         resolve()  
       })
-      console.log(this.numToHash)
     })
   }
 
@@ -69,6 +77,11 @@ class Threads {
 
     for (let post of messages) {
       this._shortMap[post.hashsum.substring(22, 32)] = post
+
+      post.body.replace(/>>(\w+)/mg, (match, shortHash) => {
+        this.registerReflink(post.hashsum.substring(22, 32), shortHash)
+      })
+
       let threadHash = (post.parent || post.hashsum) 
       if (!!!posts[threadHash]) {
         posts[threadHash] = { opening: null, replies: [] }
