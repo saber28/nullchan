@@ -173,6 +173,10 @@ body {
   text-align: center;
 }
 
+#board-header.hidden {
+  display: none;
+}
+
 #board-header h1 {
   font-size: 18pt;
   margin: 0px;
@@ -405,7 +409,7 @@ a:hover {
   text-decoration: underline;
 }
 
-.post.reply {
+.post.reply, .preloader-inner {
   background-color: #282828;
   border-width: 1px;
   border-style: solid;
@@ -414,7 +418,6 @@ a:hover {
   border-right-color: #282828;
   border-bottom-color: #282828;
   padding: 0px 7px 10px 7px;
-  
 }
 
 .post.reply .time-and-id {
@@ -423,7 +426,7 @@ a:hover {
 
 #preloader {
   position: absolute;
-  top: 130px;
+  top: 25%;
   left: 0px;
   right: 0px;
   text-align: center;
@@ -432,23 +435,26 @@ a:hover {
 
 #preloader.shown {
   display: block;
-  -webkit-animation:        fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-   -moz-animation:          fadein 2s; /* Firefox < 16 */
-    -ms-animation:          fadein 2s; /* Internet Explorer */
-     -o-animation:          fadein 2s; /* Opera < 12.1 */
 }
 
-#preloader div {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  margin-bottom: 10px;
-  color: #999;
+.preloader-inner {
+  display: table;
+  margin: 0 auto;
+  padding: 14px !important;
+  width: 150px;
 }
+
+.preloader-inner span {
+  display: block;
+  font-family: monospace;
+  font-size: 16px !important;
+  color: #bbb;
+}
+
 
 .template {
   display: none;
 }
-
 
 #thread-form {
   background: #252525;
@@ -565,11 +571,11 @@ em.quote {
 }
 
 .fadein {
-  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
-     -moz-animation: fadein 0.5s; /* Firefox < 16 */
-      -ms-animation: fadein 0.5s; /* Internet Explorer */
-       -o-animation: fadein 0.5s; /* Opera < 12.1 */
-          -webkit-animation: fadein 0.5s; -moz-animation: fadein 0.5s; -o-animation: fadein 0.5s; -ms-animation: fadein 0.5s; animation: fadein 0.5s ;
+  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+     -moz-animation: fadein 1s; /* Firefox < 16 */
+      -ms-animation: fadein 1s; /* Internet Explorer */
+       -o-animation: fadein 1s; /* Opera < 12.1 */
+          animation: fadein 1s ;
 }
 
 @keyframes fadein {

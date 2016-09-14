@@ -86,7 +86,6 @@ class Nullchan extends ZeroFrame {
           }
         }
       }
-      View.updateHeader()
       if (!!!this.currentPage) {
         View.renderNotFound()
       }

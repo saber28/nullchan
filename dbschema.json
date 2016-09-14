@@ -38,7 +38,7 @@
         "CREATE INDEX message_parent ON message(parent)",
         "CREATE INDEX message_board ON message(board)"
       ],
-      "schema_changed": 1455659111
+      "schema_changed": 1473779179
     }
   }
 }

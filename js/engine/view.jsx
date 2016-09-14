@@ -17,17 +17,15 @@ class View {
   }
 
   showPreloader() {
-    this.preloader.className     = ""
-    this.container.style.display = "none"
-    setTimeout(() => { this.preloader.className = "shown" }, 600)
+    setTimeout(() => { this.preloader.className = "fadein shown" }, 600)
   }
 
   hidePreloader() {
+    this.updateHeader()
     this.preloader.className     = ""
     this.preloader.style.display = "none"
     this.container.style.display = "block"
-    // this.container.className     = "fadein"
-    // setTimeout(() => { this.container.className = "" }, 1000)
+    this.container.className = "fadein"
   }
 
   highlightPost(shortHash, fallbackURL) {
@@ -45,7 +43,7 @@ class View {
   }
 
   renderHeader(siteInfo) {
-    this.rHeader = ReactDOM.render(<Header siteInfo={Nullchan.siteInfo} board={ {} }/>, this.header)
+    this.rHeader = ReactDOM.render(<Header siteInfo={Nullchan.siteInfo} board={ {} } hidden={true} />, this.header)
   }
 
   updateHeader() {
@@ -56,7 +54,7 @@ class View {
     }
 
     if (!!Nullchan.currentBoard && !!this.rHeader) {
-      this.rHeader.setState({board: Nullchan.currentBoard})
+      this.rHeader.setState({board: Nullchan.currentBoard, hidden: false})
     }
   }
 

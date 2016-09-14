@@ -30,7 +30,9 @@ export default class MainPage extends React.Component {
                 <table id="board-list">
                   <tbody>
                     {this.state.boards.map((board) => {
-                       return <BoardLine key={board.key} data={board}/>
+                      if (board.key != "test") {
+                        return <BoardLine key={board.key} data={board}/>  
+                      }
                     })}
                   </tbody>
                 </table>

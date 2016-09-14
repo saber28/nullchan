@@ -8,8 +8,13 @@ export default class Header extends React.Component {
   }
 
   render () {
+    let hidden = ""
+    if (this.state.hidden == true) {
+      hidden = "hidden"
+    }
+
     return (
-      <div id="board-header"> 
+      <div id="board-header" className={hidden}> 
         <h1>/<em>{this.state.board.key}</em>/ — <em>{this.state.board.name}</em></h1>
         <h2>{this.state.board.description}</h2>
 
