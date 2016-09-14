@@ -1,48 +1,24 @@
-import React      from "react"
-import Helpers    from "../libs/helpers.jsx"
-import Form       from "./form.jsx"
+import React    from "react"
+import Helpers  from "../libs/helpers.jsx"
+import Form     from "./form.jsx"
+import Reflink  from "../engine/reflinks.jsx"
 import { Attachment, AttachmentOld } from "./attachment.jsx"
 
-export default class Reflinks extends React.Component {
+class ReflinksContainer extends React.Component {
   generateURL(link) {
     let short = link.key.substring(22, 32)
     return Helpers.fixLink(`?${Nullchan.currentBoard.key}/thread/${link.parent}/hl-${short}`) 
   }
 
-  bodyClick(event) {
-    let link = null
-
-    if (event.target.className == "reflink") {
-      link = event.target
-    }
-    if (event.target.parentNode.className == "reflink") {
-      link = event.target.parentNode
-    }
-
-    if (!!link) {
-      event.preventDefault()
-      View.highlightPost(link.dataset.hash, link.href)
-    }
-  }
-
-
   render() {
-    let links = (Threads.reflinkMap[this.props.post] || []).map((ref) => {
-      let post = Threads.shortMap[ref]
-      return {
-        key:    post.hashsum,
-        short:  ref,
-        num:    Threads.hashToNum[post.hashsum],
-        parent: (post.parent || post.hashsum)
-      }
-    }).sort((a, b) => { return a.num - b.num })
+    let hashes = (Threads.reflinkMap[this.props.post] || []).map((ref) => {
+      return [ref, Threads.shortMap[ref].num]
+    }).sort((a, b) => { return a[1] - b[1] })
 
-    return <div className="reflinks" onClick={this.bodyClick}>
-      {links.map((link) => {
-        return <a 
-          href={this.generateURL(link)} 
-          className="reflink" data-hash={link.short} key={"ref" + link.short}>&gt;&gt;{link.num}</a>
-      })}
+    return <div className="reflinks">
+      { hashes.map((hash) => { 
+        return <Reflink targetShortHash={hash[0]} key={"reflink-to-" + hash[0]}/>
+      }) }
     </div>
   }
 }
@@ -73,10 +49,16 @@ export default class Post extends React.Component {
     return { __html: Markup.render(this.state.data.body, this) }
   }
 
-  highlight() {
+  scrollTo() {
     this.wrapper.scrollIntoView()
+  }
+
+  highlight() {
     this.setState({highlighted: true})
-    setTimeout((() => { this.setState({highlighted: false}) }).bind(this), 2000)
+  }
+
+  removeHighlight() {
+    this.setState({highlighted: false})
   }
 
   bodyClick(event) {
@@ -91,7 +73,7 @@ export default class Post extends React.Component {
 
     if (!!link) {
       event.preventDefault()
-      View.highlightPost(link.dataset.hash, link.href)
+      View.scrollToPost(link.dataset.hash, link.href)
     }
   }
 
@@ -176,12 +158,12 @@ export default class Post extends React.Component {
               {this.formattedTime()},
               &nbsp;
               <em className="post-id" onClick={this.callForm.bind(this)}>No.{this.postNum()}</em>
-              <Reflinks post={this.shortHashsum()} />
+              <ReflinksContainer post={this.shortHashsum()} />
             </div>
             {button}
           </div>
           {picture}
-          <blockquote className="text" onClick={this.bodyClick} ref={ (b) => {
+          <blockquote className="text" ref={ (b) => {
             if (b != null) {
               this.text = b
             }

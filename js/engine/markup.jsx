@@ -1,4 +1,6 @@
-import Helpers    from "../libs/helpers.jsx"
+import Helpers  from "../libs/helpers.jsx"
+import React    from "react"
+import Reflink  from "./reflinks.jsx"
 
 const URL_REGEXP = /[-a-zA-Z0-9@:%_\+.~#?&amp;\/\/=]{2,256}\.?[a-z]{2,4}\b([\/:][-a-zA-Z0-9@:%_\+.~#?&amp;\/\/=!]*){1,}/mg
 
@@ -15,16 +17,12 @@ class Markup {
 
     this.expressions = [
       //reflinks
-      [/&gt;&gt;(\w+)/mg, (match, shortHash) => {
-        let target = Threads.shortMap[shortHash]
-        if (!!!target) {
-          return match
+      [/&gt;&gt;(\w{10})/mg, (match, shortHash) => {
+        let fakeID = shortHash
+        if (Threads.shortMap[shortHash]) {
+          fakeID = Threads.shortMap[shortHash].num
         }
-
-        let fakeID = Threads.hashToNum[target.hashsum]
-        let parent = target.parent || target.hashsum
-        let url    = Helpers.fixLink(`?/${target.board}/thread/${parent}/hl-${shortHash}`)
-        return `<a class="reflink" href="${url}" data-hash="${shortHash}">&gt;&gt;${fakeID}</a>`
+        return `<div class="reflink-snippet" data-hash="${shortHash}">&gt;&gt;${fakeID}</div>`
       }],
 
       // quote

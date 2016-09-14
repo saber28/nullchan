@@ -1,9 +1,9 @@
 import Database from "./database.jsx"
 
 class SeenCount {
-  get actualCounter () { return this._actualCounter }
+  get actualCounter() { return this._actualCounter }
 
-  getActualCounter () {
+  getActualCounter() {
     return new Promise((resolve) => {
       if (!!this.actualCounter) {
         resolve(this.actualCounter)
@@ -13,7 +13,7 @@ class SeenCount {
     })
   }
 
-  updateActualCounter () {
+  updateActualCounter() {
     return new Promise((resolve) => {
       Database.getMessageCountByBoard().then((counter) => {
         this._actualCounter = counter
@@ -22,7 +22,7 @@ class SeenCount {
     })
   }
 
-  setLocalCounter (boardKey, forcePlusOne = false) {
+  setLocalCounter(boardKey, forcePlusOne = false) {
     Promise.all([
       this.getActualCounter(),
       this.getLocalCounter(),
@@ -41,7 +41,7 @@ class SeenCount {
     })
   }
 
-  getLocalCounter () {
+  getLocalCounter() {
     return new Promise((resolve) => {
       Nullchan.cmd("wrapperGetLocalStorage", [], (response) => {
         if (!!!response) {
@@ -57,7 +57,7 @@ class SeenCount {
     })
   }
 
-  getUnread () {
+  getUnread() {
     return new Promise((resolve) => {
       Promise.all([
         this.getActualCounter(),

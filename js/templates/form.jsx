@@ -50,13 +50,16 @@ export default class Form extends React.Component {
       Files.uploadPost(modifiedData).then((newPost) => {
         this.hideBlur()
         this.clear()
-        SeenCount.setLocalCounter(Nullchan.currentBoard.key, true)
 
         if (!!this.state.parent) {
           if (!!View.postWithReplyForm) {
             View.postWithReplyForm.setState({showForm: false})
             View.postWithReplyForm = null
           }
+
+          newPost.body.replace(/>>(\w{10})/mg, (match, shortHash) => {
+            Threads.registerReflink(newPost.hashsum.substring(22, 32), shortHash)
+          })
           Threads.appendPost(newPost)
           setTimeout(() => { SeenCount.setLocalCounter(Nullchan.currentBoard.key) }, 2000)
         } else {

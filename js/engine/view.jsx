@@ -28,13 +28,15 @@ class View {
     this.container.className = "fadein"
   }
 
-  highlightPost(shortHash, fallbackURL) {
+  scrollToPost(shortHash, fallbackURL) {
     if (!!!shortHash) {
       return
     }
     let post = Threads.entMap[shortHash]
     if (!!post) {
+      post.scrollTo()
       post.highlight()
+      setTimeout((() => { post.removeHighlight() }), 2000)
     } else {
       if (fallbackURL) {
         window.top.location.href = fallbackURL  
@@ -86,6 +88,7 @@ class View {
         this.rBoardPage = ReactDOM.render(
           <BoardPage formShown={false} threads={threads} currentPage={page} />, this.container
         )
+        this.rBoardPage.initReflinks()
         this.hidePreloader()
         if (Nullchan.currentPage == "list") {
           SeenCount.setLocalCounter(Nullchan.currentBoard.key)  
@@ -93,7 +96,7 @@ class View {
 
         let hl = window.location.search.match(/hl-(\w+)/)
         if (!!hl) {
-          this.highlightPost(hl[1])
+          this.scrollToPost(hl[1])
         }
       })
     })

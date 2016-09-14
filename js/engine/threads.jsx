@@ -9,21 +9,21 @@ class Threads {
   get hashToNum   () { return this._hashToNum   }
   get reflinkMap  () { return this._reflinkMap  }
 
-  get lastPostTime () { 
+  get lastPostTime() { 
     if (!this._lastPost) {
       return "N/A"
     }
     return Helpers.timeSince(this._lastPost.created_at) 
   }
 
-  get totalPosts () { 
+  get totalPosts() { 
     if (!this._totalPosts) {
       return "N/A"
     }
     return this._totalPosts
   }
 
-  constructor () {
+  constructor() {
     this._shortMap    = {}
     this._cachedPosts = {}
     this._entMap      = {}
@@ -34,7 +34,7 @@ class Threads {
 
   registerReflink(fromHash, toHash) {
     if (!!!this._reflinkMap[toHash]) {
-      this._reflinkMap[toHash] = []      
+      this._reflinkMap[toHash] = []
     }
     this._reflinkMap[toHash].push(fromHash)
   }
@@ -43,15 +43,18 @@ class Threads {
     return new Promise((resolve) => {
       Database.loadHashesAndTimestamps(Nullchan.currentBoard.key).then((hashes) => {
         for (var i = hashes.length - 1; i >= 0; i--) {
-          this.numToHash[i + 1] = hashes[i]
-          this.hashToNum[hashes[i]] = i + 1
+          this._numToHash[i + 1] = hashes[i]
+          this._hashToNum[hashes[i]] = i + 1
+          if (!!this._shortMap[hashes[i].substring(22, 32)]) {
+            this._shortMap[hashes[i].substring(22, 32)].num = i + 1
+          }
         }
         resolve()  
       })
     })
   }
 
-  updateLastPost () {
+  updateLastPost() {
     return new Promise((resolve) => {
       Database.getLastPost().then((post) => {
         this._lastPost = post
@@ -63,7 +66,7 @@ class Threads {
     })
   }
 
-  loadSingle (threadHash) {
+  loadSingle(threadHash) {
     return new Promise((resolve) => {
       Database.loadSingleThread(Nullchan.currentBoard.key, threadHash).then((messages) => {
         resolve(this.buildThreads(messages))
@@ -71,14 +74,14 @@ class Threads {
     })
   }
 
-  buildThreads (messages) {
+  buildThreads(messages) {
     let posts      = {}
     let threads    = []
 
     for (let post of messages) {
       this._shortMap[post.hashsum.substring(22, 32)] = post
 
-      post.body.replace(/>>(\w+)/mg, (match, shortHash) => {
+      post.body.replace(/>>(\w{10})/mg, (match, shortHash) => {
         this.registerReflink(post.hashsum.substring(22, 32), shortHash)
       })
 
@@ -105,7 +108,7 @@ class Threads {
     return threads.sort(this.sortThreads)
   }
 
-  loadAll () {
+  loadAll() {
     return new Promise((resolve) => {
       Database.loadMessagesOnBoard(Nullchan.currentBoard.key).then((messages) => {
         resolve(this.buildThreads(messages))
@@ -113,8 +116,9 @@ class Threads {
     }) 
   }
 
-  appendPost (newPost) {
-    this._shortMap[newPost.hashsum.substring(22, 32)] = newPost
+  appendPost(newPost) {
+    let shortHash = newPost.hashsum.substring(22, 32)
+    this._shortMap[shortHash] = newPost
     let parentHash = newPost.parent || newPost.hashsum
     if (!!this.cachedPosts[parentHash]) {
       this._cachedPosts[parentHash].replies.push(newPost)
@@ -123,18 +127,20 @@ class Threads {
         let posts  = [thread.opening].concat(thread.replies.sort(this.sortPosts))
         
         View.rBoardPage.threadMap[parentHash].setState({posts: posts})
+        View.rBoardPage.initReflinks()
+        View.scrollToPost(shortHash)
       }
     }
   }
 
-  sortPosts (a, b) {
+  sortPosts(a, b) {
     if (a.created_at > b.created_at) {
       return 1
     }
     return -1
   }
 
-  sortThreads (a, b) {
+  sortThreads(a, b) {
     if (a[a.length-1].created_at > b[b.length-1].created_at) {
       return -1
     }

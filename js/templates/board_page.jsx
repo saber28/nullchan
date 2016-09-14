@@ -1,7 +1,9 @@
 import React      from "react"
+import ReactDOM   from "react-dom"
 import PageBox    from "./page_box.jsx"
 import Thread     from "./thread.jsx"
 import Form       from "./form.jsx"
+import Reflink    from "../engine/reflinks.jsx"
 import Helpers    from "../libs/helpers.jsx"
 import FormButton from "./form_button.jsx"
 
@@ -32,6 +34,12 @@ export default class BoardPage extends React.Component {
       totalPages:   amountOfPages,
       data:         data.slice(startPage * perPage, startPage * perPage + perPage),
       currentPage:  finalPage
+    }
+  }
+
+  initReflinks() {
+    for (let link of this.el.getElementsByClassName("reflink-snippet")) {
+      ReactDOM.render(<Reflink targetShortHash={link.dataset.hash} />, link)
     }
   }
 
@@ -74,7 +82,7 @@ export default class BoardPage extends React.Component {
     }
 
     return (
-      <div id="board-page">
+      <div id="board-page" ref={(f) => this.el = f}>
         <Form ref={(f) => this.rForm = f} parent={parent} />
         {linkToList}
         <hr />

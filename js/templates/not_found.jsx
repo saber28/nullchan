@@ -1,4 +1,5 @@
-import React from "react"
+import React    from "react"
+import Helpers  from "../libs/helpers.jsx"
 
 export default class NotFound extends React.Component {
   render () {

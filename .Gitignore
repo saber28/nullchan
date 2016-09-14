@@ -4,5 +4,6 @@ data/settings.json
 *.db
 node_modules/*
 js/nullchan.js
+js/nullchan.js.map
 content.json
 update_files.rb

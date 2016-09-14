@@ -303,7 +303,25 @@ a:hover {
 
 .post.highlighted {
   border: 1px solid #666 !important;
-  background-color: #373737 !important;
+  background-color: #333333 !important;
+}
+
+.reflink-snippet {
+  display: inline;
+}
+
+.reflink.dead {
+  cursor: default;
+  color: #999 !important;
+  text-decoration: none;
+}
+
+.reflink.dead em {
+  text-decoration: line-through;
+}
+
+.reflink.dead:hover {
+  color: #999 !important;
 }
 
 .post .time-and-id {
