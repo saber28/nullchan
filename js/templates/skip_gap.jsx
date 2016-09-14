@@ -2,7 +2,9 @@ import React from "react"
 
 export default class SkipGap extends React.Component {
   handleClick () {
-    View.rBoardPage.threadMap[this.props.parent].setState({full: true})
+    View.rBoardPage.threadMap[this.props.parent].setState({full: true}, () => {
+      View.rBoardPage.initReflinks()
+    })
   }
 
   render() {
