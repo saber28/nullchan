@@ -7,7 +7,7 @@ export default class Images {
       }
 
       if (["image/jpeg", "image/png", "image/jpg"].indexOf(formData.file.type) == -1) {
-        reject("Only JPEG and PNG files are supported at the moment.")
+        reject("目前只支持Jpeg和Png格式的图片")
         return
       }
 
