@@ -46,13 +46,13 @@ export default class BoardPage extends React.Component {
   render() {
     let content = ""
     let parent = null 
-    let buttonText = "create new thread"
+    let buttonText = "发新贴"
     let threads
     let pageBox
     let linkToList
 
     if (Nullchan.currentPage == "thread") { 
-      buttonText = "reply to this thread"
+      buttonText = "回复"
       parent = this.props.threads[0][0].hashsum
 
       linkToList = <a href={Helpers.fixLink(`?/${Nullchan.currentBoard.key}/`)} target="_parent"
@@ -61,7 +61,7 @@ export default class BoardPage extends React.Component {
 
     if (!!!this.props.threads) {
       content = <div id="empty-board">
-        It looks like this board is empty. <br/> Why don't you post something?
+        这个板块还没有内容 <br/> 快来发表新帖子
       </div>
     } else {
       threads = this.paginate(this.props.threads, { 
