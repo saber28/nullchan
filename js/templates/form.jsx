@@ -88,7 +88,7 @@ export default class Form extends React.Component {
     result.anonymous = (name.options[name.selectedIndex].value == "anonymous")
 
     if (!!!result.file && result.body == "") {
-      alert("Your post is empty")
+      alert("请输入内容")
       return false
     }
     return result
